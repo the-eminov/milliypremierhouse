@@ -1,0 +1,1713 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <!-- ============================================================
+    БАЗОВЫЕ НАСТРОЙКИ И МЕТА-ТЕГИ
+    ============================================================ -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>Milliy Premier House</title>
+    <link rel="icon" href="logo.png">
+    
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#12214C',
+                        'brand-white': '#FFFFFF',
+                        'brand-blue': '#337AC1',
+                        'brand-orange': '#E6C082',
+                        'brand-nile': '#A7CBDB',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ============================================================
+        ГЛОБАЛЬНЫЙ CSS
+        ============================================================ */
+        :root {
+            --color-dark: #12214C;
+            --color-white: #FFFFFF;
+            --nav-height: 80px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            cursor: default;
+        }
+
+        /* ============================================================
+        ПРЕЛОАДЕР
+        ============================================================ */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: var(--color-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.4s cubic-bezier(0.77, 0, 0.175, 1), backdrop-filter 1.2s ease, transform 1.2s ease;
+            pointer-events: all;
+        }
+        #preloader.hidden-loader {
+            opacity: 0;
+            backdrop-filter: blur(40px);
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+        
+        .preloader-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
+        }
+        .preloader-icon {
+            width: 160px;
+            height: 160px;
+            animation: breath 2.5s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 70px rgba(51, 122, 193, 0.5));
+            border: 1px solid rgba(167, 203, 219, 0.15);
+            border-radius: 50%;
+            padding: 25px;
+            background: rgba(18, 33, 76, 0.3);
+            backdrop-filter: blur(15px);
+        }
+        .preloader-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(167, 203, 219, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        .preloader-bar-inner {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, #337AC1, #E6C082, transparent);
+            animation: loadingBar 2.2s ease-in-out forwards;
+        }
+        @keyframes loadingBar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        @keyframes breath {
+            0% { transform: scale(0.95) rotate(-3deg); opacity: 0.7; }
+            100% { transform: scale(1.05) rotate(3deg); opacity: 1; }
+        }
+
+        /* ============================================================
+        АНИМАЦИИ
+        ============================================================ */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(80px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInItem {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .animate-hero-title { animation: fadeUp 1.2s cubic-bezier(0.23, 1, 0.320, 1) 2.0s both; }
+        .animate-hero-subtitle { animation: fadeUp 1.0s cubic-bezier(0.23, 1, 0.320, 1) 2.4s both; }
+        .animate-hero-btn { animation: fadeUp 1.0s cubic-bezier(0.23, 1, 0.320, 1) 2.8s both; }
+        .animate-stats { animation: slideInLeft 0.8s cubic-bezier(0.23, 1, 0.320, 1) 3.2s both; }
+
+        /* ============================================================
+        NAVBAR
+        ============================================================ */
+        .navbar-scrolled {
+            background-color: rgba(18, 33, 76, 0.85) !important;
+            backdrop-filter: blur(22px) !important;
+            -webkit-backdrop-filter: blur(22px) !important;
+            border-bottom: 1px solid rgba(167, 203, 219, 0.15) !important;
+            box-shadow: 0 4px 50px rgba(0, 0, 0, 0.4) !important;
+        }
+        
+        .btn-glow-orange {
+            box-shadow: 0 0 40px rgba(230, 192, 130, 0.15);
+            transition: box-shadow 0.4s ease, background-color 0.4s ease, transform 0.3s ease;
+        }
+        .btn-glow-orange:hover {
+            box-shadow: 0 0 80px rgba(230, 192, 130, 0.6);
+            transform: translateY(-4px) scale(1.03);
+            background-color: #dbb075;
+        }
+        
+        .btn-glow-glass {
+            transition: all 0.4s ease;
+            backdrop-filter: blur(4px);
+        }
+        .btn-glow-glass:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        #mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(18, 33, 76, 0.98);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.6s ease;
+            visibility: hidden;
+        }
+        #mobile-menu-overlay.open {
+            transform: translateX(0);
+            visibility: visible;
+        }
+        .menu-link-mobile {
+            display: block;
+            font-size: 2.8rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.3s ease;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            width: 100%;
+        }
+        .menu-link-mobile:hover {
+            color: #E6C082;
+            transform: translateX(10px);
+        }
+
+        /* ============================================================
+        HERO БЛОК
+        ============================================================ */
+        .hero-grid-layout {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            padding-top: 100px;
+            padding-bottom: 40px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+            position: relative;
+            z-index: 5;
+            gap: 2rem;
+        }
+
+        .hero-col-left {
+            width: 100%;
+            text-align: left;
+            align-items: flex-start;
+            padding-left: 0;
+            padding-right: 0;
+            flex-shrink: 0;
+        }
+
+        .hero-col-right {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            position: relative;
+            overflow: visible;
+        }
+
+        /* ============================================================
+        СТИЛЬ КОЛЛАЖА
+        ============================================================ */
+        .collage-wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: auto;
+            gap: 12px;
+            padding: 15px;
+            width: 100%;
+            max-width: 650px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .collage-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .collage-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+            background: rgba(18, 33, 76, 0.3);
+            backdrop-filter: blur(4px);
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            transform: rotate(0deg) !important;
+            opacity: 0;
+            animation: fadeInItem 0.5s ease forwards;
+        }
+
+        .collage-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+            filter: contrast(1.05) saturate(1.1);
+            aspect-ratio: auto;
+            background: #12214C;
+        }
+
+        .collage-item:hover {
+            transform: scale(1.05) !important;
+            z-index: 10;
+            box-shadow: 0 20px 60px rgba(230, 192, 130, 0.3), 0 0 0 3px rgba(230, 192, 130, 0.2);
+            border-color: #E6C082 !important;
+        }
+
+        .collage-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .collage-item.clone {
+            opacity: 0.5;
+            border-color: rgba(255,255,255,0.1);
+        }
+        .collage-item.clone img {
+            filter: brightness(0.7) saturate(0.5);
+        }
+
+        .collage-item.loading {
+            background: linear-gradient(135deg, #1a2d5a, #12214C);
+            min-height: 150px;
+        }
+
+        /* ============================================================
+        СМЕЩЕНИЕ КОЛЛАЖА ВПРАВО
+        ============================================================ */
+        .collage-container {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
+        /* ============================================================
+        АДАПТИВНОСТЬ
+        ============================================================ */
+        @media (min-width: 768px) {
+            .hero-grid-layout {
+                flex-direction: row;
+                min-height: 100vh;
+                padding-top: var(--nav-height);
+                padding-left: 2rem;
+                padding-right: 2rem;
+                padding-bottom: 2rem;
+                gap: 3rem;
+                align-items: center;
+            }
+            .hero-col-left { width: 45%; max-width: 45%; padding-top: 10px; }
+            .hero-col-right { width: 55%; max-width: 55%; padding: 1rem 0; }
+            .collage-wrapper { max-width: 550px; gap: 10px; padding: 10px; max-height: 85vh; }
+            .collage-container { padding-right: 0; }
+        }
+
+        @media (min-width: 1024px) {
+            .hero-grid-layout { padding-left: 4rem; padding-right: 4rem; gap: 4rem; }
+            .hero-col-left { width: 40%; max-width: 40%; padding-top: 20px; }
+            .hero-col-right { width: 60%; max-width: 60%; }
+            .collage-wrapper { max-width: 600px; gap: 12px; padding: 12px; max-height: 85vh; }
+            .collage-container { padding-right: 1rem; }
+        }
+
+        @media (min-width: 1280px) {
+            .hero-grid-layout { padding-left: 6rem; padding-right: 6rem; gap: 5rem; }
+            .hero-col-left { width: 38%; max-width: 38%; padding-top: 30px; }
+            .hero-col-right { width: 62%; max-width: 62%; }
+            .collage-wrapper { max-width: 700px; gap: 14px; padding: 14px; max-height: 85vh; }
+            .collage-container { padding-right: 2rem; }
+        }
+
+        @media (min-width: 1536px) {
+            .hero-grid-layout { padding-left: 10rem; padding-right: 10rem; gap: 6rem; max-width: 2000px; margin: 0 auto; }
+            .hero-col-left { width: 35%; max-width: 35%; padding-top: 40px; }
+            .hero-col-right { width: 65%; max-width: 65%; }
+            .collage-wrapper { max-width: 800px; gap: 16px; padding: 16px; max-height: 85vh; }
+            .collage-container { padding-right: 3rem; }
+        }
+
+        @media (max-width: 767px) {
+            .hero-grid-layout { padding: 100px 1rem 2rem 1rem; gap: 1.5rem; }
+            .hero-col-left { max-width: 100%; padding-top: 5px; text-align: left; align-items: flex-start; }
+            .hero-col-right { max-width: 100%; padding: 0.5rem 0; }
+            .collage-wrapper {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 100%;
+                gap: 8px;
+                padding: 8px;
+                max-height: 50vh;
+            }
+            .btn-group-hero { justify-content: flex-start !important; width: 100% !important; flex-direction: column !important; align-items: stretch !important; }
+            .btn-group-hero a { width: 100%; justify-content: center; padding: 0.8rem 1.5rem; }
+            .stats-group-hero { justify-content: flex-start !important; }
+            .collage-container { justify-content: center; padding-right: 0; }
+        }
+
+        /* ============================================================
+        ФОНОВОЕ ИЗОБРАЖЕНИЕ
+        ============================================================ */
+        #hero-section {
+            background-color: #12214C;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image: url('mph-flag.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.45;
+            filter: brightness(0.7) saturate(0.8);
+        }
+        
+        #hero-section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background-color: rgba(18, 33, 76, 0.55);
+        }
+
+        /* ============================================================
+        РАЗМЕРЫ ТЕКСТА
+        ============================================================ */
+        .hero-title-main {
+            font-size: 2.4rem;
+            line-height: 0.85;
+            letter-spacing: -0.03em;
+        }
+        .hero-title-sub {
+            font-size: 1.2rem;
+            line-height: 0.9;
+            letter-spacing: 0.08em;
+        }
+
+        @media (min-width: 400px) {
+            .hero-title-main { font-size: 3rem; }
+            .hero-title-sub { font-size: 1.6rem; }
+        }
+        @media (min-width: 640px) {
+            .hero-title-main { font-size: 3.8rem; }
+            .hero-title-sub { font-size: 2rem; }
+        }
+        @media (min-width: 768px) {
+            .hero-title-main { font-size: 4.2rem; }
+            .hero-title-sub { font-size: 2.2rem; }
+        }
+        @media (min-width: 1024px) {
+            .hero-title-main { font-size: 5rem; }
+            .hero-title-sub { font-size: 2.8rem; }
+        }
+        @media (min-width: 1280px) {
+            .hero-title-main { font-size: 6rem; }
+            .hero-title-sub { font-size: 3.2rem; }
+        }
+        @media (min-width: 1536px) {
+            .hero-title-main { font-size: 7rem; }
+            .hero-title-sub { font-size: 3.8rem; }
+        }
+
+        .hero-title-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.05rem;
+        }
+
+        #particle-canvas {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            pointer-events: none !important;
+            z-index: 2 !important;
+        }
+        
+        .hero-content-wrapper {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+        }
+
+        .collage-item[data-grid="span2"] {
+            grid-column: span 2;
+        }
+        .collage-item[data-grid="span1"] {
+            grid-column: span 1;
+        }
+        .collage-item[data-color="orange"] {
+            border-color: #E6C082;
+        }
+        .collage-item[data-color="blue"] {
+            border-color: #337AC1;
+        }
+        .collage-item[data-color="nile"] {
+            border-color: #A7CBDB;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    ПРЕЛОАДЕР
+    ============================================================ -->
+    <div id="preloader">
+        <div class="preloader-wrapper">
+            <div class="preloader-icon relative flex items-center justify-center">
+                <img src="logo.png" alt="Milliy загружается" class="w-24 h-auto object-contain drop-shadow-[0_0_30px_rgba(51,122,193,0.5)]">
+            </div>
+            <div class="preloader-bar">
+                <div class="preloader-bar-inner"></div>
+            </div>
+            <span class="text-[10px] tracking-[0.3em] text-brand-white/30 uppercase font-light mt-3">Загрузка архитектуры...</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    МОБИЛЬНОЕ МЕНЮ
+    ============================================================ -->
+    <div id="mobile-menu-overlay" class="flex flex-col items-center justify-center gap-12">
+        <div class="absolute top-6 right-6">
+            <button id="close-menu-btn" class="w-14 h-14 flex items-center justify-center text-brand-white/60 hover:text-brand-orange transition-colors duration-300 border border-brand-white/10 rounded-full hover:border-brand-orange/50 bg-brand-dark/20 backdrop-blur-sm">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <div class="flex flex-col items-center justify-center space-y-4 w-full max-w-2xl px-6 relative">
+            <img src="logo.png" alt="Мобильное лого" class="h-16 w-auto mb-8 opacity-60">
+            <div class="w-full text-center">
+                <a href="/ru/about.html" class="menu-link-mobile">О нас</a>
+                <a href="/ru/projects.html" class="menu-link-mobile">Проекты</a>
+            </div>
+            <div class="pt-12 border-t border-brand-white/10 w-full flex flex-col gap-4 justify-center">
+                <a href="/ru/contacts.html" class="inline-block bg-brand-orange text-brand-dark px-12 py-4 rounded-full font-semibold text-lg w-full text-center transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(230,192,130,0.2)]">
+                    Связаться
+                </a>
+                <a href="uz.html" class="inline-block bg-brand-orange text-brand-dark px-12 py-4 rounded-full font-semibold text-lg w-full text-center transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(230,192,130,0.2)]">
+                    O'zbekcha
+                </a>
+            </div>
+            <div class="flex gap-8 text-brand-white/30 mt-6">
+                <a href="https://instagram.com/milliy.interior" target="_blank" class="text-sm uppercase tracking-[0.2em] cursor-pointer hover:text-brand-white transition">Instagram</a>
+                <a href="https://t.me/milliypremier_bot" target="_blank" class="text-sm uppercase tracking-[0.2em] cursor-pointer hover:text-brand-white transition">Telegram</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    HEADER
+    ============================================================ -->
+    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 ease-in-out bg-transparent border-b border-transparent h-[var(--nav-height)] flex items-center">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 w-full flex items-center justify-between relative">
+            
+            <a href="#" class="group flex items-center gap-2 md:gap-4 relative z-10">
+                <img src="logo.png" alt="Milliy Premier House" class="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_20px_rgba(230,192,130,0.3)]">
+                <span class="hidden sm:inline-block font-inter font-semibold text-[10px] sm:text-xs md:text-sm lg:text-base tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/90 group-hover:text-brand-orange transition-colors duration-300">
+                    MILLIY<span class="text-brand-nile font-light tracking-[0.1em] sm:tracking-[0.3em] ml-1 sm:ml-2">PREMIER HOUSE</span>
+                </span>
+            </a>
+
+            <nav class="hidden md:flex items-center gap-6 lg:gap-8 xl:gap-10 2xl:gap-14 text-[11px] lg:text-sm xl:text-base font-medium tracking-wide text-brand-white/80">
+                <a href="/ru/about.html" class="relative py-1 hover:text-brand-white transition-colors duration-300 group">
+                    <span class="relative z-10">О нас</span>
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="/ru/projects.html" class="relative py-1 hover:text-brand-white transition-colors duration-300 group">
+                    <span class="relative z-10">Проекты</span>
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="/ru/contacts.html" class="relative py-1 hover:text-brand-white transition-colors duration-300 group">
+                    <span class="relative z-10">Контакты</span>
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="uz.html" class="hidden lg:inline-block btn-glow-orange px-4 lg:px-6 xl:px-8 py-2.5 rounded-full border-[1.5px] border-brand-orange text-brand-orange hover:text-brand-dark transition-all duration-300 text-xs lg:text-sm bg-transparent hover:bg-brand-orange">
+                    O'zbekcha
+                </a>
+            </nav>
+
+            <div class="flex md:hidden items-center gap-4 relative z-10">
+                <button id="mobile-menu-btn" class="flex flex-col justify-center items-center w-8 h-8 space-y-1.5 relative focus:outline-none group">
+                    <span class="block w-6 h-[2px] bg-brand-white rounded-full transition-all duration-300 group-hover:bg-brand-orange group-hover:w-7"></span>
+                    <span class="block w-6 h-[2px] bg-brand-white rounded-full transition-all duration-300 group-hover:bg-brand-orange group-hover:w-5"></span>
+                    <span class="block w-6 h-[2px] bg-brand-white rounded-full transition-all duration-300 group-hover:bg-brand-orange group-hover:w-7"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    HERO СЕКЦИЯ
+    ============================================================ -->
+    <section id="hero-section" class="relative w-full overflow-hidden flex items-center justify-start min-h-screen">
+        
+        <div id="particle-canvas-container"></div>
+
+        <div class="hero-content-wrapper container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 hero-grid-layout">
+            
+            <div class="hero-col-left flex flex-col space-y-3 md:space-y-4 lg:space-y-5 xl:space-y-6 w-full">
+
+                <div class="hero-title-wrapper animate-hero-title w-full relative z-20">
+                    <h1 class="hero-title-main font-black text-brand-white drop-shadow-2xl w-full uppercase tracking-tight">
+                        MILLIY
+                    </h1>
+                    <h2 class="hero-title-sub font-light text-brand-nile w-full uppercase tracking-wide">
+                        PREMIER HOUSE
+                    </h2>
+                </div>
+
+                <p class="max-w-full md:max-w-lg lg:max-w-xl text-[0.85rem] sm:text-sm md:text-base lg:text-lg text-brand-white/60 font-light leading-[1.6] sm:leading-relaxed animate-hero-subtitle tracking-wide relative z-20">
+                    <span class="block font-medium text-brand-white/80 mb-1">Архитектурное бюро, сочетающее национальные традиции и современные технологии.</span> 
+                    С 2018 года мы помогаем строить дома будущего. Создаем пространства, вдохновляющие жить в гармонии с природой и прогрессом.
+                </p>
+
+                <div class="flex flex-col sm:flex-row gap-4 pt-2 animate-hero-btn btn-group-hero w-full relative z-20">
+                    <a href="projects.html" class="btn-glow-orange inline-flex items-center justify-center gap-3 bg-brand-orange text-brand-dark px-8 py-3 md:px-10 md:py-3.5 rounded-full font-semibold text-sm sm:text-base tracking-wide transition-all duration-300 shadow-[0_0_30px_rgba(230,192,130,0.2)]">
+                        <span>Посмотреть проекты</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                    <a href="about.html" class="btn-glow-glass inline-flex items-center justify-center gap-3 text-brand-white/80 hover:text-brand-white px-8 py-3 md:px-10 md:py-3.5 rounded-full font-medium text-sm sm:text-base transition-all duration-300 border border-brand-white/20 hover:border-brand-white/50 bg-brand-white/5 backdrop-blur-sm">
+                        <span>О нас</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-4 sm:gap-8 pt-4 sm:pt-5 border-t border-brand-white/10 w-full max-w-md animate-stats stats-group-hero relative z-20">
+                    <div class="flex flex-col">
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-white">2018</span>
+                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Основание</span>
+                    </div>
+                    <div class="w-px h-8 sm:h-10 lg:h-12 bg-brand-white/20"></div>
+                    <div class="flex flex-col">
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-orange">8+</span>
+                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Лет опыта</span>
+                    </div>
+                    <div class="w-px h-8 sm:h-10 lg:h-12 bg-brand-white/20 hidden sm:block"></div>
+                    <div class="flex flex-col hidden sm:flex">
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-nile">30+</span>
+                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Проектов</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= ПРАВАЯ КОЛОНКА: КОЛЛАЖ ================= -->
+            <div class="hero-col-right collage-container">
+                <div class="collage-wrapper" id="collage-wrapper">
+                    <!-- Изображения загружаются через JavaScript -->
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // ============================================================
+            // 1. ЗАГРУЗКА ИЗОБРАЖЕНИЙ КОЛЛАЖА - 10 КОПИЙ (17 ФОТО)
+            // ============================================================
+            const collageWrapper = document.getElementById('collage-wrapper');
+            const totalImages = 17;
+            const duplicateCount = 10;
+            
+            const colors = ['orange', 'blue', 'nile'];
+            
+            function createCollageItem(src, index, copyIndex, isClone = false) {
+                const item = document.createElement('div');
+                item.className = 'collage-item loading';
+                if (isClone) item.classList.add('clone');
+                
+                const spanType = (index % 5 === 2 || index % 5 === 4) ? 'span2' : 'span1';
+                const colorType = colors[index % 3];
+                
+                item.setAttribute('data-grid', spanType);
+                item.setAttribute('data-color', colorType);
+                
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `Collage image ${index}`;
+                img.loading = 'lazy';
+                img.decoding = 'async';
+                
+                img.onload = function() {
+                    item.classList.remove('loading');
+                };
+                
+                img.onerror = function() {
+                    this.style.background = `linear-gradient(135deg, #337AC1, #E6C082)`;
+                    this.style.minHeight = '150px';
+                    this.style.width = '100%';
+                    this.style.height = '100%';
+                    this.style.objectFit = 'cover';
+                    item.classList.remove('loading');
+                };
+                
+                item.appendChild(img);
+                return item;
+            }
+            
+            for (let copy = 0; copy < duplicateCount; copy++) {
+                for (let i = 1; i <= totalImages; i++) {
+                    const isClone = copy > 0;
+                    const item = createCollageItem(`collage/${i}.jpg`, i, copy, isClone);
+                    collageWrapper.appendChild(item);
+                }
+            }
+            
+            // ============================================================
+            // 2. БЕСКОНЕЧНАЯ ПРОКРУТКА - ЗАПУСКАЕТСЯ СРАЗУ
+            // ============================================================
+            let scrollInterval;
+            let isHovering = false;
+            let scrollSpeed = 1.2;
+            
+            function startInfiniteScroll() {
+                if (scrollInterval) {
+                    clearInterval(scrollInterval);
+                }
+                
+                scrollInterval = setInterval(() => {
+                    if (!isHovering && collageWrapper) {
+                        collageWrapper.scrollTop += scrollSpeed;
+                        
+                        if (collageWrapper.scrollTop + collageWrapper.clientHeight >= collageWrapper.scrollHeight - 2) {
+                            collageWrapper.scrollTop = 0;
+                        }
+                    }
+                }, 30);
+            }
+            
+            startInfiniteScroll();
+            
+            collageWrapper.addEventListener('mouseenter', () => {
+                isHovering = true;
+            });
+            
+            collageWrapper.addEventListener('mouseleave', () => {
+                isHovering = false;
+            });
+            
+            collageWrapper.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                collageWrapper.scrollTop += e.deltaY * 0.8;
+            }, { passive: false });
+            
+            // ============================================================
+            // 3. ЧАСТИЦЫ НА КАНВАСЕ
+            // ============================================================
+            const canvas = document.createElement('canvas');
+            canvas.id = 'particle-canvas';
+            canvas.style.cssText = `
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                width: 100% !important;
+                height: 100% !important;
+                pointer-events: none !important;
+                z-index: 2 !important;
+            `;
+            
+            const heroSection = document.getElementById('hero-section');
+            heroSection.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const particleCount = 50;
+            
+            function resizeCanvas() {
+                const rect = heroSection.getBoundingClientRect();
+                width = canvas.width = rect.width;
+                height = canvas.height = rect.height;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+            
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.3;
+                    this.vy = (Math.random() - 0.5) * 0.3;
+                    this.size = Math.random() * 1.5 + 0.5;
+                    this.opacity = Math.random() * 0.25 + 0.05;
+                    const colors = ['#E6C082', '#337AC1', '#A7CBDB', '#FFFFFF'];
+                    this.color = colors[Math.floor(Math.random() * colors.length)];
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowColor = this.color;
+                    ctx.shadowBlur = 6;
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fill();
+                }
+            }
+            
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+            
+            let mouse = { x: null, y: null };
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = heroSection.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+            
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+                
+                particles.forEach((p, index) => {
+                    p.update();
+                    p.draw();
+                    
+                    if (mouse.x !== null) {
+                        const dx = mouse.x - p.x;
+                        const dy = mouse.y - p.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 150) {
+                            const force = (150 - distance) / 400;
+                            p.vx -= dx * force * 0.015;
+                            p.vy -= dy * force * 0.015;
+                            const maxSpeed = 2.5;
+                            const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                            if (speed > maxSpeed) {
+                                p.vx = (p.vx / speed) * maxSpeed;
+                                p.vy = (p.vy / speed) * maxSpeed;
+                            }
+                        }
+                    }
+                    
+                    for (let j = index + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 80) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(167, 203, 219, ${0.04 * (1 - dist / 80)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+            
+            // ============================================================
+            // 4. ПРЕЛОАДЕР
+            // ============================================================
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden-loader');
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 1400);
+            }, 2400);
+            
+            // ============================================================
+            // 5. NAVBAR
+            // ============================================================
+            const header = document.getElementById('site-header');
+            window.addEventListener('scroll', () => {
+                if (window.scrollY > 80) {
+                    header.classList.add('navbar-scrolled');
+                } else {
+                    header.classList.remove('navbar-scrolled');
+                }
+            });
+            
+            // ============================================================
+            // 6. МОБИЛЬНОЕ МЕНЮ
+            // ============================================================
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu-overlay');
+            
+            const toggleMenu = (open) => {
+                if (open) {
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                }
+            };
+            
+            mobileMenuBtn.addEventListener('click', () => toggleMenu(true));
+            closeMenuBtn.addEventListener('click', () => toggleMenu(false));
+            
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => toggleMenu(false));
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target === mobileMenu) toggleMenu(false);
+            });
+            
+        });
+    </script>
+
+    <!-- ============================================================
+СЕКЦИЯ 2: О НАС (ИСТОРИЯ И НАСЛЕДИЕ)
+СПРАВА ИЗОБРАЖЕНИЕ С ПАРАЛЛАКС-ЭФФЕКТОМ, СЛЕВА ТЕКСТ
+============================================================ -->
+<section id="about" class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48">
+    
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vw] bg-brand-nile rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-brand-orange rounded-full blur-[140px] opacity-5 mix-blend-overlay pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 2xl:gap-32 items-center">
+            
+            <div class="flex flex-col space-y-6 lg:space-y-8 xl:space-y-10 w-full order-2 lg:order-1">
+                <div class="flex items-center gap-3">
+                    <span class="h-[1px] w-8 sm:w-12 bg-brand-orange/60"></span>
+                    <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-white/40 font-light">О нас</span>
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                    <span class="text-brand-orange block">Эстетика</span>
+                    и совершенная гармония <br class="hidden sm:block">
+                    Возможности
+                </h2>
+
+                <p class="max-w-full lg:max-w-xl text-[0.95rem] sm:text-base lg:text-lg xl:text-xl text-brand-white/60 font-light leading-[1.6] sm:leading-relaxed tracking-wide">
+                    С 2018 года Milliy Premier House создает уникальное направление в архитектуре и дизайне. 
+                    Мы стремимся строить не просто здания, а духовные и эстетические ценности, которые сохранятся на протяжении поколений. 
+                    В каждом проекте мы черпаем вдохновение из истории и внедряем инновации.
+                </p>
+
+                <div class="flex flex-wrap gap-4 sm:gap-6 pt-4">
+                    <div class="flex flex-col space-y-1">
+                        <span class="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-white">8+</span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/30 font-light">Лет успеха</span>
+                    </div>
+                    <div class="hidden sm:block w-px h-10 bg-brand-white/5"></div>
+                    <div class="flex flex-col space-y-1">
+                        <span class="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-orange">95%</span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/30 font-light">Доверие клиентов</span>
+                    </div>
+                    <div class="hidden sm:block w-px h-10 bg-brand-white/5"></div>
+                    <div class="flex flex-col space-y-1">
+                        <span class="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-nile">30+</span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/30 font-light">Завершенных проектов</span>
+                    </div>
+                </div>
+
+                <a href="about.html" class="inline-flex items-center gap-3 border-b border-brand-white/20 pb-1 text-brand-white/80 hover:text-brand-orange hover:border-brand-orange transition-colors duration-300 text-sm sm:text-base font-medium tracking-wide group">
+                    <span>Узнать больше</span>
+                    <svg class="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </div>
+
+            <div class="relative w-full h-[350px] sm:h-[450px] md:h-[500px] lg:h-[600px] xl:h-[700px] 2xl:h-[800px] bg-brand-blue/10 rounded-[40px] sm:rounded-[50px] lg:rounded-[60px] overflow-hidden group order-1 lg:order-2">
+                
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-dark/40 to-brand-dark/80 z-10 mix-blend-multiply pointer-events-none"></div>
+                
+                <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                    <svg class="w-[80%] h-[80%] text-brand-white/10 animate-pulse" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="300" height="300" fill="none" stroke="currentColor" stroke-width="2" />
+                        <path d="M 50 250 L 200 100 L 350 250" fill="none" stroke="currentColor" stroke-width="2" />
+                        <line x1="200" y1="100" x2="200" y2="350" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5"/>
+                        <line x1="50" y1="200" x2="350" y2="200" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5"/>
+                        <circle cx="200" cy="200" r="100" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="10 10"/>
+                    </svg>
+                </div>
+
+                <div class="absolute inset-0 z-30 flex flex-col items-center justify-center p-6 sm:p-10 text-center space-y-4 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent">
+                    <span class="text-xs tracking-[0.3em] text-brand-orange/80 uppercase">Est. 2018</span>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl font-light text-brand-white drop-shadow-2xl">Milliy Premier House</h3>
+                    <div class="w-16 h-[2px] bg-brand-orange/60 mx-auto"></div>
+                    <p class="text-brand-white/60 text-xs sm:text-sm max-w-xs mx-auto font-light tracking-wide">Архитектура — это мост между искусством и жизнью</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 3: ВДОХНОВЛЯЮЩАЯ ЦИТАТА (АРХИТЕКТУРНАЯ ФИЛОСОФИЯ)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-20 sm:py-24 lg:py-32 border-t border-brand-white/5 border-b border-brand-white/5">
+    
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
+        <span class="text-[20rem] sm:text-[30rem] lg:text-[40rem] font-bold text-brand-white leading-none select-none tracking-tighter">"</span>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        <div class="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-4 sm:space-y-6">
+            <div class="w-10 h-[1px] bg-brand-orange/50 mx-auto"></div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[4rem] 2xl:text-[5rem] font-light leading-[1.1] text-brand-white/90 tracking-wide">
+                Мы строим не <span class="font-bold text-brand-white italic">здания</span>, 
+                <br class="hidden sm:block">
+                а <span class="text-brand-orange font-medium">образ жизни</span>.
+            </h2>
+            <div class="w-10 h-[1px] bg-brand-orange/50 mx-auto"></div>
+            <p class="text-sm sm:text-base lg:text-lg text-brand-white/40 font-light uppercase tracking-[0.3em] sm:tracking-[0.4em]">
+                — Философия Milliy Premier House, 2026
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 4: ПОРТФОЛИО / ПРОЕКТЫ (3D КАРТЫ)
+============================================================ -->
+<section id="projects" class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48">
+    
+    <div class="absolute top-1/4 right-0 -translate-x-1/4 translate-y-1/4 w-[40vw] h-[40vw] bg-brand-blue rounded-full blur-[150px] opacity-10 mix-blend-overlay animate-floating-slow pointer-events-none"></div>
+    <div class="absolute bottom-1/4 left-0 translate-x-1/4 -translate-y-1/4 w-[50vw] h-[50vw] bg-brand-orange rounded-full blur-[140px] opacity-10 animate-floating-reverse pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col lg:flex-row items-end justify-between gap-6 lg:gap-10 mb-12 lg:mb-16 xl:mb-20">
+            <div class="flex flex-col space-y-3 lg:space-y-4 max-w-2xl">
+                <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Избранные проекты</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                    <span class="text-brand-nile font-light">Искусство</span> архитектуры
+                </h2>
+                <p class="text-brand-white/50 font-light text-sm sm:text-base lg:text-lg max-w-md mt-2">
+                    Каждый проект — это отражение нашей страсти и уважения к национальному наследию.
+                </p>
+            </div>
+            <a href="contacts.html" class="btn-glow-orange inline-flex items-center gap-2 bg-brand-orange text-brand-dark px-6 py-3 rounded-full font-semibold text-xs sm:text-sm tracking-wide transition-all duration-300 shadow-[0_0_30px_rgba(230,192,130,0.2)] shrink-0">
+                <span>Все проекты</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-10">
+            
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-blue/10 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(51,122,193,0.2)] hover:-translate-y-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[70%] h-[70%] text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="50" y="100" width="300" height="200" rx="10" />
+                        <path d="M 50 250 L 150 200 L 250 250 L 350 180" />
+                        <circle cx="300" cy="150" r="15" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Жилой</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Национальный Квартал</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xs">Жилой комплекс, созданный в гармонии современности и национального стиля</p>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-orange/10 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(230,192,130,0.2)] hover:-translate-y-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[70%] h-[70%] text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M 100 300 L 100 150 Q 100 50 200 50 Q 300 50 300 150 L 300 300" />
+                        <line x1="200" y1="300" x2="200" y2="150" />
+                        <line x1="100" y1="200" x2="300" y2="200" />
+                        <circle cx="200" cy="100" r="10" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Социальный</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Центр Культуры</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xs">Уникальное архитектурное решение, объединяющее историю и инновации</p>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-nile/10 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(167,203,219,0.2)] hover:-translate-y-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[70%] h-[70%] text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <polygon points="200,80 320,250 80,250" />
+                        <line x1="80" y1="250" x2="80" y2="350" />
+                        <line x1="320" y1="250" x2="320" y2="350" />
+                        <line x1="200" y1="250" x2="200" y2="350" />
+                        <line x1="80" y1="300" x2="320" y2="300" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Бизнес</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Premium Офис</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xs">Гармония современной деловой среды и эстетичного дизайна</p>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-dark/80 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)] hover:-translate-y-2 lg:col-span-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[60%] h-[60%] text-brand-white/20" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="50" y="50" width="300" height="300" rx="20" />
+                        <rect x="100" y="100" width="200" height="200" rx="10" />
+                        <rect x="150" y="150" width="100" height="100" rx="5" />
+                        <circle cx="200" cy="200" r="40" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Премиум</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Дворцовый Комплекс</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xl">Элитный жилой комплекс, сочетающий роскошь и современность. Узбекская архитектура и глобальные дизайнерские тенденции.</p>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-blue/20 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(51,122,193,0.2)] hover:-translate-y-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[70%] h-[70%] text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M 150 350 L 150 150 L 250 100 L 350 150 L 350 350" />
+                        <path d="M 150 200 L 250 250 L 350 200" stroke-dasharray="5 5"/>
+                        <path d="M 150 250 L 250 300 L 350 250" stroke-dasharray="5 5"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Экологичный</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Зеленый Дом</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xs">Экологичное, энергоэффективное жилье в гармонии с природой.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 5: УСЛУГИ (АРХИТЕКТУРНЫЙ ТРИПТИХ)
+============================================================ -->
+<section id="services" class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute inset-0 pointer-events-none opacity-10">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] bg-brand-nile rounded-full blur-[200px] animate-pulse-glow"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col space-y-4 mb-14 lg:mb-20 xl:mb-24 max-w-3xl">
+            <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Наше мастерство</span>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                Три <span class="text-brand-orange font-light">столпа</span> 
+                <br class="hidden sm:block">
+                совершенства
+            </h2>
+            <p class="text-brand-white/50 font-light text-sm sm:text-base lg:text-lg max-w-xl mt-2">
+                Наш профессионализм и эстетическое видение на пути от проекта до завершения.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 xl:gap-14 2xl:gap-16">
+            
+            <div class="group relative w-full h-[450px] sm:h-[500px] md:h-[600px] lg:h-[650px] 2xl:h-[750px] rounded-3xl lg:rounded-[40px] overflow-hidden bg-brand-dark/80 border border-brand-white/5 hover:border-brand-blue/40 transition-all duration-500 hover:shadow-[0_30px_80px_rgba(51,122,193,0.15)] flex flex-col justify-end p-8 sm:p-10 lg:p-12 xl:p-14">
+                
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] sm:w-[200px] lg:w-[300px] h-[150px] sm:h-[200px] lg:h-[300px] bg-brand-blue rounded-full blur-[80px] sm:blur-[100px] opacity-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-150 pointer-events-none"></div>
+                
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10 sm:opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                    <svg class="w-full h-full p-8 sm:p-10 lg:p-16 text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M 150 350 L 150 100 L 250 50 L 350 100 L 350 350" />
+                        <path d="M 150 150 L 250 200 L 350 150" stroke-dasharray="5 5"/>
+                        <path d="M 150 200 L 250 250 L 350 200" stroke-dasharray="5 5"/>
+                        <path d="M 150 250 L 250 300 L 350 250" stroke-dasharray="5 5"/>
+                        <circle cx="250" cy="100" r="15" fill="rgba(230, 192, 130, 0.3)" />
+                    </svg>
+                </div>
+
+                <div class="relative z-10 flex flex-col space-y-3 sm:space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="h-[2px] w-6 bg-brand-blue"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">01 / 03</span>
+                    </div>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl xl:text-1xl font-medium text-brand-white tracking-tight">Архитектура</h3>
+                    <div class="w-12 h-[2px] bg-brand-orange/60 transition-all duration-500 group-hover:w-24"></div>
+                    <p class="text-brand-white/50 text-xs sm:text-sm lg:text-base font-light max-w-xs sm:max-w-sm lg:max-w-md leading-relaxed">
+                        Создание уникальных и функциональных зданий. Сочетание национальных традиций с современными технологиями.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">3D Моделирование</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Генпланы</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[450px] sm:h-[500px] md:h-[600px] lg:h-[650px] 2xl:h-[750px] rounded-3xl lg:rounded-[40px] overflow-hidden bg-brand-dark/80 border border-brand-white/5 hover:border-brand-orange/40 transition-all duration-500 hover:shadow-[0_30px_80px_rgba(230,192,130,0.15)] flex flex-col justify-end p-8 sm:p-10 lg:p-12 xl:p-14">
+                
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] sm:w-[200px] lg:w-[300px] h-[150px] sm:h-[200px] lg:h-[300px] bg-brand-orange rounded-full blur-[80px] sm:blur-[100px] opacity-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-150 pointer-events-none"></div>
+                
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10 sm:opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                    <svg class="w-full h-full p-8 sm:p-10 lg:p-16 text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="100" y="100" width="200" height="200" rx="20" />
+                        <rect x="130" y="130" width="140" height="140" rx="10" />
+                        <rect x="160" y="160" width="80" height="80" rx="5" />
+                        <circle cx="200" cy="200" r="30" />
+                        <path d="M 200 100 L 200 300 M 100 200 L 300 200" stroke-width="1" stroke-dasharray="4 4"/>
+                    </svg>
+                </div>
+
+                <div class="relative z-10 flex flex-col space-y-3 sm:space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="h-[2px] w-6 bg-brand-orange"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">02 / 03</span>
+                    </div>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-medium text-brand-white tracking-tight">Интерьер</h3>
+                    <div class="w-12 h-[2px] bg-brand-orange/60 transition-all duration-500 group-hover:w-24"></div>
+                    <p class="text-brand-white/50 text-xs sm:text-sm lg:text-base font-light max-w-xs sm:max-w-sm lg:max-w-md leading-relaxed">
+                        Комфорт и роскошь. Интерьеры — это выражение образа жизни. Каждая деталь стремится к совершенству.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Дизайн</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Освещение</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Мебель</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[450px] sm:h-[500px] md:h-[600px] lg:h-[650px] 2xl:h-[750px] rounded-3xl lg:rounded-[40px] overflow-hidden bg-brand-dark/80 border border-brand-white/5 hover:border-brand-nile/40 transition-all duration-500 hover:shadow-[0_30px_80px_rgba(167,203,219,0.15)] flex flex-col justify-end p-8 sm:p-10 lg:p-12 xl:p-14">
+                
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] sm:w-[200px] lg:w-[300px] h-[150px] sm:h-[200px] lg:h-[300px] bg-brand-nile rounded-full blur-[80px] sm:blur-[100px] opacity-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-150 pointer-events-none"></div>
+                
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10 sm:opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                    <svg class="w-full h-full p-8 sm:p-10 lg:p-16 text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M 200 50 L 50 200 L 200 350 L 350 200 Z" />
+                        <circle cx="200" cy="200" r="60" />
+                        <circle cx="200" cy="200" r="40" />
+                        <circle cx="200" cy="200" r="20" />
+                        <path d="M 200 50 L 200 350 M 50 200 L 350 200" stroke-dasharray="3 3" stroke-width="1"/>
+                    </svg>
+                </div>
+
+                <div class="relative z-10 flex flex-col space-y-3 sm:space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="h-[2px] w-6 bg-brand-nile"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">03 / 03</span>
+                    </div>
+                    <h3 class="text-3xl sm:text-3xl lg:text-4xl xl:text-0.5xl font-medium text-brand-white tracking-tight">Строительство</h3>
+                    <div class="w-12 h-[2px] bg-brand-orange/60 transition-all duration-500 group-hover:w-24"></div>
+                    <p class="text-brand-white/50 text-xs sm:text-sm lg:text-base font-light max-w-xs sm:max-w-sm lg:max-w-md leading-relaxed">
+                        Полный цикл от идеи до готового объекта. Качество и надежность — наш строительный принцип.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Контроль</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Инженерия</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Отделка</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 6: НАША ИСТОРИЯ (ХРОНОЛОГИЯ / TIMELINE)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute top-0 right-0 w-[60vw] h-[60vw] bg-brand-blue rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-brand-orange rounded-full blur-[140px] opacity-5 mix-blend-overlay pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col space-y-4 mb-16 lg:mb-24 max-w-3xl">
+            <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Страницы истории</span>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                Наш <span class="text-brand-nile font-light">путь</span>
+            </h2>
+            <p class="text-brand-white/50 font-light text-sm sm:text-base lg:text-lg max-w-xl mt-2">
+                С 2018 года до сегодняшнего дня. Каждый год — это уникальное достижение и источник вдохновения.
+            </p>
+        </div>
+
+        <div class="relative flex flex-col md:flex-row md:gap-12 lg:gap-16 xl:gap-20">
+            
+            <div class="hidden md:flex flex-col items-center shrink-0 relative z-20 pt-4">
+                <div class="w-[2px] h-full bg-gradient-to-b from-transparent via-brand-white/20 to-brand-nile/40 absolute top-0 left-1/2 -translate-x-1/2"></div>
+            </div>
+
+            <div class="flex flex-col w-full space-y-12 lg:space-y-16 relative z-10">
+                
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-orange ring-4 ring-brand-orange/20"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-orange ring-4 ring-brand-orange/20"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-orange tracking-tight">2018</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Основание</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Milliy Premier House начал свою деятельность как архитектурное бюро. Первый проект, первый успех, первые шаги.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-white/40 ring-4 ring-brand-white/10"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-white/40 ring-4 ring-brand-white/10"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-white/70 tracking-tight">2020</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Первый крупный проект</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Начало строительства жилого комплекса «Национальный Квартал», расширение дизайнерских и строительных возможностей бюро.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-nile ring-4 ring-brand-nile/20"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-nile ring-4 ring-brand-nile/20"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-nile tracking-tight">2022</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Международное признание</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Дизайн-работы бюро были представлены на архитектурных форумах в странах СНГ и Европы.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-blue ring-4 ring-brand-blue/20"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-blue ring-4 ring-brand-blue/20"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-blue tracking-tight">2024</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Новые возможности</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Внедрены современные технологии, включая 3D-моделирование и дизайн на основе виртуальной реальности.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-orange/80 ring-4 ring-brand-orange/30"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-orange/80 ring-4 ring-brand-orange/30"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-orange tracking-tight">2026</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Вперед в будущее</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Мы продолжаем свою деятельность, стремясь стать ведущим архитектурным брендом в регионе.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 7: ОТЗЫВЫ КЛИЕНТОВ (TESTIMONIALS)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
+        <span class="text-[20rem] sm:text-[30rem] lg:text-[40rem] font-bold text-brand-white leading-none select-none tracking-tighter -rotate-6">"</span>
+    </div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] bg-brand-nile rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col lg:flex-row items-end justify-between gap-6 lg:gap-10 mb-14 lg:mb-20 xl:mb-24">
+            <div class="flex flex-col space-y-3 lg:space-y-4 max-w-2xl">
+                <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Отзывы клиентов</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                    Что говорят <span class="text-brand-nile font-light">о нас</span>
+                </h2>
+            </div>
+            <div class="flex gap-3">
+                <button class="w-12 h-12 rounded-full border border-brand-white/10 flex items-center justify-center text-brand-white/40 hover:text-brand-white hover:border-brand-orange/50 transition-colors duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button class="w-12 h-12 rounded-full border border-brand-white/10 flex items-center justify-center text-brand-white/40 hover:text-brand-white hover:border-brand-orange/50 transition-colors duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-10">
+            
+            <div class="group relative w-full p-8 sm:p-10 bg-brand-white/5 backdrop-blur-sm rounded-3xl border border-brand-white/5 hover:border-brand-orange/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(230,192,130,0.05)] hover:-translate-y-2">
+                <div class="flex items-center gap-1 mb-4">
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                </div>
+                <p class="text-brand-white/70 text-sm sm:text-base font-light leading-relaxed mb-6">«Работать с Milliy Premier House — легко и приятно. Они не только выслушали наши идеи, но и превратили наши мечты в реальность. Дизайн, комфорт и эстетика — всё идеально!»</p>
+                <div class="flex items-center gap-3 pt-4 border-t border-brand-white/5">
+                    <div class="w-10 h-10 rounded-full bg-brand-blue/30 flex items-center justify-center text-brand-white/60 text-sm font-bold">Б.Э.</div>
+                    <div class="flex flex-col">
+                        <span class="text-xs sm:text-sm font-medium text-brand-white">Бехруз Э.</span>
+                        <span class="text-[10px] text-brand-white/30 uppercase tracking-wide">Рейтинг Yandex Map</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full p-8 sm:p-10 bg-brand-white/5 backdrop-blur-sm rounded-3xl border border-brand-white/5 hover:border-brand-nile/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(167,203,219,0.05)] hover:-translate-y-2">
+                <div class="flex items-center gap-1 mb-4">
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                </div>
+                <p class="text-brand-white/70 text-sm sm:text-base font-light leading-relaxed mb-6">«При проектировании нашего офиса команда Milliy Premier House продемонстрировала высокий профессионализм. Их взгляды и любовь к минимализму изменили облик нашей компании.»</p>
+                <div class="flex items-center gap-3 pt-4 border-t border-brand-white/5">
+                    <div class="w-10 h-10 rounded-full bg-brand-nile/30 flex items-center justify-center text-brand-white/60 text-sm font-bold">П.Э.</div>
+                    <div class="flex flex-col">
+                        <span class="text-xs sm:text-sm font-medium text-brand-white">Пабло Эмилон</span>
+                        <span class="text-[10px] text-brand-white/30 uppercase tracking-wide">Рейтинг Google</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full p-8 sm:p-10 bg-brand-white/5 backdrop-blur-sm rounded-3xl border border-brand-white/5 hover:border-brand-blue/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(51,122,193,0.05)] hover:-translate-y-2">
+                <div class="flex items-center gap-1 mb-4">
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                </div>
+                <p class="text-brand-white/70 text-sm sm:text-base font-light leading-relaxed mb-6">«Жить в доме, построенном Milliy Premier House, — это мечта. Они учли все наши требования и предложили красивые и практичные решения. Всё на высшем уровне.»</p>
+                <div class="flex items-center gap-3 pt-4 border-t border-brand-white/5">
+                    <div class="w-10 h-10 rounded-full bg-brand-orange/30 flex items-center justify-center text-brand-white/60 text-sm font-bold">С.Д.</div>
+                    <div class="flex flex-col">
+                        <span class="text-xs sm:text-sm font-medium text-brand-white">Сардор Д.</span>
+                        <span class="text-[10px] text-brand-white/30 uppercase tracking-wide">Рейтинг Yandex Map</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 8: 360 ТУР И ВИДЕОФОН
+============================================================ -->
+
+<!-- ============================================================
+СЕКЦИЯ 11: ВИДЕОГАЛЕРЕЯ (КИНЕМАТОГРАФИЧЕСКИЙ МОНТАЖ)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-blue rounded-full blur-[120px] opacity-10 animate-floating-slow"></div>
+        <div class="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[50vw] h-[50vw] bg-brand-orange rounded-full blur-[120px] opacity-10 animate-floating-reverse"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col space-y-4 mb-14 lg:mb-20 xl:mb-24 max-w-3xl">
+            <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Визуальное наследие</span>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                Архитектура <span class="text-brand-nile font-light">в движении</span>
+            </h2>
+            <p class="text-brand-white/50 font-light text-sm sm:text-base lg:text-lg max-w-xl mt-2">
+                Почувствуйте настоящее дыхание наших проектов. Каждый кадр — свидетельство нашей эстетики и качества.
+            </p>
+        </div>
+
+        <!-- 2 ОСНОВНЫХ ВИДЕОБЛОКА -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 2xl:gap-12 items-stretch">
+            
+            <!-- ВИДЕО 1: Bg-video-of-mph.uz.mp4 -->
+            <div class="group relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[650px] rounded-2xl lg:rounded-[30px] overflow-hidden border border-brand-white/5 hover:border-brand-blue/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(51,122,193,0.15)]">
+                
+                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-105 transition-transform duration-700">
+                    <source src="bg-video-of-mph.uz.mp4" type="video/mp4">
+                </video>
+                
+                <div class="absolute inset-0 bg-brand-dark/40 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent z-10 pointer-events-none"></div>
+                
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col items-start">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="h-[2px] w-8 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">01 / 02</span>
+                    </div>
+                    <span class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white tracking-tight">Атмосфера</span>
+                    <p class="text-brand-white/60 text-xs sm:text-sm font-light mt-1 max-w-xs lg:max-w-sm">Дизайн и атмосфера, созданные философией бренда</p>
+                </div>
+            </div>
+
+            <!-- ВИДЕО 2: Gallery-for-mph.mp4 -->
+            <div class="group relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[650px] rounded-2xl lg:rounded-[30px] overflow-hidden border border-brand-white/5 hover:border-brand-orange/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(230,192,130,0.15)]">
+                
+                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-105 transition-transform duration-700">
+                    <source src="gallery-for-mph.mp4" type="video/mp4">
+                </video>
+                
+                <div class="absolute inset-0 bg-brand-dark/40 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent z-10 pointer-events-none"></div>
+                
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col items-start">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="h-[2px] w-8 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">02 / 02</span>
+                    </div>
+                    <span class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white tracking-tight">Дизайн</span>
+                    <p class="text-brand-white/60 text-xs sm:text-sm font-light mt-1 max-w-xs lg:max-w-sm">Кадры этапов дизайна</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 12: ЕЩЁ РАЗ О НАС (ФИНАЛЬНЫЙ БЛОК)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] bg-brand-nile rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-[40vw] h-[40vw] bg-brand-blue rounded-full blur-[100px] opacity-5 mix-blend-overlay pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-16 xl:gap-20">
+            
+            <div class="flex flex-col space-y-6 lg:space-y-8 max-w-2xl">
+                <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">О нас</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                    Национальные <span class="text-brand-nile font-light">традиции</span> <br class="hidden sm:block">
+                    и современное <span class="text-brand-orange font-light">будущее</span>
+                </h2>
+                <p class="text-brand-white/60 font-light text-sm sm:text-base lg:text-lg max-w-lg leading-relaxed">
+                    С 2018 года мы работаем над обновлением архитектурного облика Узбекистана. 
+                    Milliy Premier House — это не просто архитектура, а творческая философия, которая останется наследием для поколений.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <span class="inline-flex items-center gap-2 text-brand-white/40 text-xs uppercase tracking-widest">
+                        <span class="w-2 h-2 rounded-full bg-brand-orange"></span> 8+ лет опыта
+                    </span>
+                    <span class="inline-flex items-center gap-2 text-brand-white/40 text-xs uppercase tracking-widest">
+                        <span class="w-2 h-2 rounded-full bg-brand-nile"></span> 30+ проектов
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col space-y-6 w-full max-w-md lg:max-w-sm shrink-0">
+                <div class="relative p-6 sm:p-8 rounded-2xl lg:rounded-3xl border border-brand-white/5 bg-brand-white/5 backdrop-blur-sm hover:border-brand-orange/30 transition-all duration-300">
+                    <div class="flex flex-col space-y-3">
+                        <span class="text-brand-white/30 text-xs uppercase tracking-widest">Главный офис</span>
+                        <span class="text-brand-white text-sm sm:text-base font-light">Ташкент, Алмазарский район, <br>ул. Себзор, Milliy Premier Office</span>
+                    </div>
+                </div>
+                <div class="relative p-6 sm:p-8 rounded-2xl lg:rounded-3xl border border-brand-white/5 bg-brand-white/5 backdrop-blur-sm hover:border-brand-nile/30 transition-all duration-300">
+                    <div class="flex flex-col space-y-3">
+                        <span class="text-brand-white/30 text-xs uppercase tracking-widest">Время работы</span>
+                        <span class="text-brand-white text-sm sm:text-base font-light">Пн — Пт: 09:00 – 18:00</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 13: СОЦИАЛЬНЫЕ СЕТИ И КОНТАКТЫ
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-20 lg:py-28 border-t border-brand-white/5">
+    
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 xl:gap-8">
+            
+            <a href="https://www.instagram.com/milliy.interior/" class="group flex flex-col items-center justify-center p-8 lg:p-12 bg-brand-white/5 backdrop-blur-sm rounded-2xl border border-brand-white/5 hover:border-brand-blue/40 hover:bg-brand-blue/10 transition-all duration-300 hover:-translate-y-2">
+                <div class="w-12 h-12 rounded-full border border-brand-white/20 flex items-center justify-center text-brand-white/60 group-hover:text-brand-white group-hover:border-brand-white/60 transition-colors duration-300 mb-3">
+                    <span class="text-sm font-bold tracking-widest">IG</span>
+                </div>
+                <span class="text-brand-white/60 group-hover:text-brand-white text-xs uppercase tracking-widest transition-colors duration-300">Instagram</span>
+            </a>
+
+            <a href="https://t.me/milliypremier_bot" class="group flex flex-col items-center justify-center p-8 lg:p-12 bg-brand-white/5 backdrop-blur-sm rounded-2xl border border-brand-white/5 hover:border-brand-nile/40 hover:bg-brand-nile/10 transition-all duration-300 hover:-translate-y-2">
+                <div class="w-12 h-12 rounded-full border border-brand-white/20 flex items-center justify-center text-brand-white/60 group-hover:text-brand-white group-hover:border-brand-white/60 transition-colors duration-300 mb-3">
+                    <span class="text-sm font-bold tracking-widest">TG</span>
+                </div>
+                <span class="text-brand-white/60 group-hover:text-brand-white text-xs uppercase tracking-widest transition-colors duration-300">Telegram</span>
+            </a>
+            
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+СЕКЦИЯ 14: ПОДВАЛ (ФУТЕР)
+============================================================ -->
+<footer class="relative w-full bg-brand-dark border-t border-brand-white/10 overflow-hidden py-12 lg:py-16 xl:py-20">
+    
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-brand-nile rounded-full blur-[100px] opacity-5"></div>
+        <div class="absolute top-0 right-0 w-[20vw] h-[20vw] bg-brand-blue rounded-full blur-[100px] opacity-5"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col md:flex-row items-start justify-between gap-12 pb-12 border-b border-brand-white/10">
+            
+            <div class="flex flex-col space-y-4 max-w-sm">
+                <a href="#" class="flex items-center gap-2 group">
+                    <img src="logo.png" alt="Milliy Premier House" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    <span class="font-inter font-semibold text-sm tracking-[0.2em] text-brand-white/90 group-hover:text-brand-orange transition-colors duration-300 uppercase">
+                        MILLIY<span class="text-brand-nile font-light tracking-[0.3em] ml-1">PREMIER HOUSE</span>
+                    </span>
+                </a>
+                <p class="text-brand-white/30 text-xs font-light leading-relaxed">
+                    Архитектурное бюро, сочетающее национальные традиции и современные технологии.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-10 lg:gap-16">
+                
+                <div class="flex flex-col space-y-3">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/20 font-medium">Страницы</span>
+                    <ul class="flex flex-col space-y-2">
+                        <li><a href="about.html" class="text-brand-white/40 hover:text-brand-orange text-xs tracking-wide transition-colors duration-300">О нас</a></li>
+                        <li><a href="projects.html" class="text-brand-white/40 hover:text-brand-orange text-xs tracking-wide transition-colors duration-300">Проекты</a></li>
+                        <li><a href="contacts.html" class="text-brand-white/40 hover:text-brand-orange text-xs tracking-wide transition-colors duration-300">Контакты</a></li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col space-y-3">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/20 font-medium">Услуги</span>
+                    <ul class="flex flex-col space-y-2">
+                        <li><span class="text-brand-white/40 text-xs tracking-wide">Архитектура</span></li>
+                        <li><span class="text-brand-white/40 text-xs tracking-wide">Дизайн интерьера</span></li>
+                        <li><span class="text-brand-white/40 text-xs tracking-wide">Строительный контроль</span></li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col space-y-3">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/20 font-medium">Контакты</span>
+                    <ul class="flex flex-col space-y-2">
+                        <li><a href="tel:+998712070013" class="text-brand-white/40 hover:text-brand-nile text-xs tracking-wide transition-colors duration-300">+998 71 207 00 13</a></li>
+                        <li><span class="text-brand-white/40 text-xs tracking-wide">Ташкент, Алмазар</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-brand-white/20 text-[10px] sm:text-xs tracking-wider uppercase">
+            <span>&copy; 2026 ООО "MILLIY PREMIER HOUSE". Все права защищены.</span>
+            <div class="flex items-center gap-6">
+
+                <span>Создано <a href="https://eminov.uz" class="text-brand-orange hover:text-brand-nile">EMISOFT DIGITAL</a></span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================
+JAVASCRIPT: АНИМАЦИЯ ПОЯВЛЕНИЯ ПРОЕКТОВ
+============================================================ -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.project-card, .service-card, .timeline-item').forEach(el => {
+            el.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700', 'ease-out');
+            observer.observe(el);
+        });
+    });
+</script>
+
+</body>
+</html>

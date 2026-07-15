@@ -1,0 +1,1658 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <!-- ============================================================
+    BAZA SOZLAMALARI VA META-TEGLAR
+    ============================================================ -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <title>Milliy Premier House</title>
+    <link rel="icon" href="logo.png">
+    
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // ============================================================
+        // Tailwind rang palitrasi sozlamalari
+        // ============================================================
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-dark': '#12214C',
+                        'brand-white': '#FFFFFF',
+                        'brand-blue': '#337AC1',
+                        'brand-orange': '#E6C082',
+                        'brand-nile': '#A7CBDB',
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                    animation: {
+                        'floating-slow': 'floating 10s infinite alternate ease-in-out',
+                        'floating-reverse': 'floatingReverse 7s infinite alternate ease-in-out',
+                        'pulse-glow': 'pulseGlow 4s infinite alternate',
+                        'spin-slow': 'spin 25s linear infinite',
+                    },
+                    keyframes: {
+                        floating: {
+                            '0%': { transform: 'translateY(0px) scale(1) rotate(0deg)' },
+                            '100%': { transform: 'translateY(-40px) scale(1.05) rotate(5deg)' },
+                        },
+                        floatingReverse: {
+                            '0%': { transform: 'translateY(0px) scale(1) rotate(0deg)' },
+                            '100%': { transform: 'translateY(40px) scale(1.05) rotate(-5deg)' },
+                        },
+                        pulseGlow: {
+                            '0%': { opacity: 0.2, filter: 'blur(80px)' },
+                            '100%': { opacity: 0.6, filter: 'blur(120px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* ============================================================
+        GLOBAL CSS O'ZGARUVCHILAR VA QAYTA TIKLASH
+        ============================================================ */
+        :root {
+            --color-dark: #12214C;
+            --color-white: #FFFFFF;
+            --color-blue: #337AC1;
+            --color-orange: #E6C082;
+            --color-nile: #A7CBDB;
+            --nav-height: 80px;
+            --cursor-glow: rgba(51, 122, 193, 0.4);
+            --cursor-main: rgba(230, 192, 130, 0.8);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-dark);
+            color: var(--color-white);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        /* ============================================================
+        PRELOADER (YUKLASH EKRANI)
+        ============================================================ */
+        #preloader {
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background-color: var(--color-dark);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 1.4s cubic-bezier(0.77, 0, 0.175, 1), backdrop-filter 1.2s ease, transform 1.2s ease;
+            pointer-events: all;
+        }
+        #preloader.hidden-loader {
+            opacity: 0;
+            backdrop-filter: blur(40px);
+            transform: scale(0.9);
+            pointer-events: none;
+        }
+        
+        .preloader-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
+        }
+        .preloader-icon {
+            width: 160px;
+            height: 160px;
+            animation: breath 2.5s infinite alternate ease-in-out;
+            filter: drop-shadow(0 0 70px rgba(51, 122, 193, 0.5));
+            border: 1px solid rgba(167, 203, 219, 0.15);
+            border-radius: 50%;
+            padding: 25px;
+            background: rgba(18, 33, 76, 0.3);
+            backdrop-filter: blur(15px);
+        }
+        .preloader-bar {
+            width: 200px;
+            height: 2px;
+            background: rgba(167, 203, 219, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            position: relative;
+        }
+        .preloader-bar-inner {
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, transparent, var(--color-blue), var(--color-orange), transparent);
+            animation: loadingBar 2.2s ease-in-out forwards;
+        }
+        @keyframes loadingBar {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        @keyframes breath {
+            0% { transform: scale(0.95) rotate(-3deg); opacity: 0.7; }
+            100% { transform: scale(1.05) rotate(3deg); opacity: 1; }
+        }
+
+        /* ============================================================
+        KIRISH ANIMATSIYALARI (FADE-UP & SLIDE)
+        ============================================================ */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(80px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes slideRight {
+            from { opacity: 0; transform: translateX(-80px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes slideInLeft {
+            from { opacity: 0; transform: translateX(-40px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .animate-hero-title { animation: fadeUp 1.2s cubic-bezier(0.23, 1, 0.320, 1) 2.0s both; }
+        .animate-hero-subtitle { animation: fadeUp 1.0s cubic-bezier(0.23, 1, 0.320, 1) 2.4s both; }
+        .animate-hero-btn { animation: fadeUp 1.0s cubic-bezier(0.23, 1, 0.320, 1) 2.8s both; }
+        .animate-stats { animation: slideInLeft 0.8s cubic-bezier(0.23, 1, 0.320, 1) 3.2s both; }
+        .animate-mobile-graphic { animation: slideRight 1.2s cubic-bezier(0.23, 1, 0.320, 1) 2.4s both; }
+
+        /* ============================================================
+        NAVBAR VA MOBIL MENYU STILLARI
+        ============================================================ */
+        .navbar-scrolled {
+            background-color: rgba(18, 33, 76, 0.85) !important;
+            backdrop-filter: blur(22px) !important;
+            -webkit-backdrop-filter: blur(22px) !important;
+            border-bottom: 1px solid rgba(167, 203, 219, 0.15) !important;
+            box-shadow: 0 4px 50px rgba(0, 0, 0, 0.4) !important;
+        }
+        
+        .btn-glow-orange {
+            box-shadow: 0 0 40px rgba(230, 192, 130, 0.15);
+            transition: box-shadow 0.4s ease, background-color 0.4s ease, transform 0.3s ease;
+        }
+        .btn-glow-orange:hover {
+            box-shadow: 0 0 80px rgba(230, 192, 130, 0.6);
+            transform: translateY(-4px) scale(1.03);
+            background-color: #dbb075;
+        }
+        
+        .btn-glow-glass {
+            transition: all 0.4s ease;
+            backdrop-filter: blur(4px);
+        }
+        .btn-glow-glass:hover {
+            background-color: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.6);
+            backdrop-filter: blur(10px);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+
+        #mobile-menu-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(18, 33, 76, 0.98);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%);
+            transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.6s ease;
+            visibility: hidden;
+        }
+        #mobile-menu-overlay.open {
+            transform: translateX(0);
+            visibility: visible;
+        }
+        .menu-link-mobile {
+            display: block;
+            font-size: 2.8rem;
+            font-weight: 400;
+            letter-spacing: 0.05em;
+            color: rgba(255,255,255,0.6);
+            transition: all 0.3s ease;
+            padding: 1.2rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            text-align: center;
+            width: 100%;
+        }
+        .menu-link-mobile:hover {
+            color: #E6C082;
+            transform: translateX(10px);
+        }
+
+        /* ============================================================
+        HERO BO'LIMI UCHUN RESPONSIVE GRID (ENG ASOSIY)
+        ============================================================ */
+        .hero-grid-layout {
+            display: flex;
+            flex-direction: column-reverse;
+            min-height: 100vh;
+            padding-top: 120px;
+            padding-bottom: 40px;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        /* Planshetlar (768px dan) */
+        @media (min-width: 768px) {
+            .hero-grid-layout {
+                flex-direction: row;
+                min-height: 100vh;
+                padding-top: var(--nav-height);
+                padding-left: 2.5rem;
+                padding-right: 2.5rem;
+                gap: 4.5rem;
+            }
+            .hero-col-left {
+                width: 60%;
+                text-align: left;
+                align-items: flex-start;
+            }
+            .hero-col-right {
+                width: 40%;
+                display: flex;
+                justify-content: flex-end;
+                align-items: center;
+                height: 80vh;
+            }
+            .mobile-only-graphic {
+                display: none !important;
+            }
+        }
+
+        /* Desktop (1024px dan) */
+        @media (min-width: 1024px) {
+            .hero-grid-layout {
+                padding-left: 5rem;
+                padding-right: 5rem;
+                gap: 6rem;
+            }
+            .hero-col-left {
+                width: 55%;
+            }
+            .hero-col-right {
+                width: 45%;
+            }
+        }
+
+        /* Ultra-keng ekranlar (1536px dan) */
+        @media (min-width: 1536px) {
+            .hero-grid-layout {
+                padding-left: 14rem;
+                padding-right: 14rem;
+                gap: 10rem;
+                max-width: 2000px;
+                margin: 0 auto;
+            }
+            .hero-col-left {
+                width: 50%;
+            }
+            .hero-col-right {
+                width: 50%;
+            }
+        }
+
+        /* Mobil telefonlar (767px gacha) */
+        @media (max-width: 767px) {
+            .hero-col-right {
+                display: none !important;
+            }
+            .hero-col-left {
+                width: 100%;
+                padding: 0 1.5rem;
+                text-align: center;
+                align-items: center;
+            }
+            .mobile-only-graphic {
+                display: flex !important;
+                justify-content: center;
+                width: 100%;
+                max-width: 340px;
+                margin: 0 auto 30px auto;
+            }
+            .btn-group-hero {
+                justify-content: center !important;
+                width: 100% !important;
+                flex-direction: column !important;
+                align-items: stretch !important;
+            }
+            .btn-group-hero a {
+                width: 100%;
+                justify-content: center;
+                padding: 0.8rem 1.5rem;
+            }
+            .stats-group-hero {
+                justify-content: center !important;
+            }
+        }
+
+        /* Juda kichik mobil ekranlar (400px dan 500px gacha) */
+        @media (min-width: 380px) and (max-width: 500px) {
+            .text-responsive-hero {
+                font-size: 2.8rem !important;
+                line-height: 0.9 !important;
+            }
+        }
+
+        /* ============================================================
+        ATMOSFERA UCHUN QO'SHIMCHA ANIMATSIYALAR VA FONLAR
+        ============================================================ */
+        .swirl-orange {
+            background: radial-gradient(circle, rgba(230, 192, 130, 0.4) 0%, rgba(18, 33, 76, 0) 70%);
+            mix-blend-mode: overlay;
+        }
+        .swirl-blue {
+            background: radial-gradient(circle, rgba(51, 122, 193, 0.5) 0%, rgba(18, 33, 76, 0) 70%);
+            mix-blend-mode: overlay;
+        }
+        .floating-particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    PRELOADER (YUKLASH ANIMATSIYASI)
+    ============================================================ -->
+    <div id="preloader">
+        <div class="preloader-wrapper">
+            <div class="preloader-icon relative flex items-center justify-center">
+                <img src="logo.png" alt="Milliy Yuklanmoqda" class="w-24 h-auto object-contain drop-shadow-[0_0_30px_rgba(51,122,193,0.5)]">
+            </div>
+            <div class="preloader-bar">
+                <div class="preloader-bar-inner"></div>
+            </div>
+            <span class="text-[10px] tracking-[0.3em] text-brand-white/30 uppercase font-light mt-3">Arxitektura yuklanmoqda...</span>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    CUSTOM KURSOR (SICHQONCHANI ALMASHTIRADI)
+    ============================================================ -->
+    <div id="custom-cursor-dot"></div>
+    <div id="custom-cursor-outline"></div>
+
+    <!-- ============================================================
+    MOBIL MENYU (TO'LIQ EKRAN, CHAPGA SIRPANUVCHI)
+    ============================================================ -->
+    <div id="mobile-menu-overlay" class="flex flex-col items-center justify-center gap-12">
+        <!-- Yopish tugmasi -->
+        <div class="absolute top-6 right-6">
+            <button id="close-menu-btn" class="w-14 h-14 flex items-center justify-center text-brand-white/60 hover:text-brand-orange transition-colors duration-300 border border-brand-white/10 rounded-full hover:border-brand-orange/50 bg-brand-dark/20 backdrop-blur-sm">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        
+        <!-- Havolalar -->
+        <div class="flex flex-col items-center justify-center space-y-4 w-full max-w-2xl px-6 relative">
+            <img src="logo.png" alt="Mobil logo" class="h-16 w-auto mb-8 opacity-60">
+            <div class="w-full text-center">
+                <a href="about.html" class="menu-link-mobile">Biz haqimizda</a>
+                <a href="projects.html" class="menu-link-mobile">Loyihalar</a>
+            </div>
+            <div class="pt-12 border-t border-brand-white/10 w-full flex justify-center">
+                <a href="contacts.html" class="inline-block bg-brand-orange text-brand-dark px-12 py-4 rounded-full font-semibold text-lg w-full text-center transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(230,192,130,0.2)]">
+                    Bog'lanish
+                </a>
+                <a href="ru.html" class="inline-block bg-brand-orange text-brand-dark px-12 py-4 rounded-full font-semibold text-lg w-full text-center transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(230,192,130,0.2)]">
+                    Русский
+                </a>
+            </div>
+            <div class="flex gap-8 text-brand-white/30 mt-6">
+                <a href="https://instagram.com/milliy.interior" target="_blank" class="text-sm uppercase tracking-[0.2em] cursor-pointer hover:text-brand-white transition">Instagram</a>
+                <a href="https://t.me/milliypremier_bot" target="_blank" class="text-sm uppercase tracking-[0.2em] cursor-pointer hover:text-brand-white transition">Telegram</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    ASOSIY NAVIGATSIYA PANELI (HEADER)
+    ============================================================ -->
+    <header id="site-header" class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 ease-in-out bg-transparent border-b border-transparent h-[var(--nav-height)] flex items-center">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 w-full flex items-center justify-between relative">
+            
+            <!-- Logotip (Desktop va Mobil) -->
+            <a href="#" class="group flex items-center gap-2 md:gap-4 relative z-10">
+                <img src="logo.png" alt="Milliy Premier House" class="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_20px_rgba(230,192,130,0.3)]">
+                <span class="hidden sm:inline-block font-inter font-semibold text-[10px] sm:text-xs md:text-sm lg:text-base tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/90 group-hover:text-brand-orange transition-colors duration-300">
+                    MILLIY<span class="text-brand-nile font-light tracking-[0.1em] sm:tracking-[0.3em] ml-1 sm:ml-2">PREMIER HOUSE</span>
+                </span>
+            </a>
+
+            <!-- Desktop menyu -->
+            <nav class="hidden md:flex items-center gap-6 lg:gap-8 xl:gap-10 2xl:gap-14 text-[11px] lg:text-sm xl:text-base font-medium tracking-wide text-brand-white/80">
+                <a href="about.html" class="relative py-1 hover:text-brand-white transition-colors duration-300 group">
+                    <span class="relative z-10">Biz haqimizda</span>
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="projects.html" class="relative py-1 hover:text-brand-white transition-colors duration-300 group">
+                    <span class="relative z-10">Loyihalar</span>
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="contacts.html" class="relative py-1 hover:text-brand-white transition-colors duration-300 group">
+                    <span class="relative z-10">Bog'lanish</span>
+                    <span class="absolute -bottom-1 left-0 w-0 h-[2px] bg-brand-orange transition-all duration-300 group-hover:w-full"></span>
+                </a>
+                <a href="ru.html" class="hidden lg:inline-block btn-glow-orange px-4 lg:px-6 xl:px-8 py-2.5 rounded-full border-[1.5px] border-brand-orange text-brand-orange hover:text-brand-dark transition-all duration-300 text-xs lg:text-sm bg-transparent hover:bg-brand-orange">
+                    Русский
+                </a>
+            </nav>
+
+            <!-- Mobil Menu Toggle (Burger) -->
+            <div class="flex md:hidden items-center gap-4 relative z-10">
+                <button id="mobile-menu-btn" class="flex flex-col justify-center items-center w-8 h-8 space-y-1.5 relative focus:outline-none group">
+                    <span class="block w-6 h-[2px] bg-brand-white rounded-full transition-all duration-300 group-hover:bg-brand-orange group-hover:w-7"></span>
+                    <span class="block w-6 h-[2px] bg-brand-white rounded-full transition-all duration-300 group-hover:bg-brand-orange group-hover:w-5"></span>
+                    <span class="block w-6 h-[2px] bg-brand-white rounded-full transition-all duration-300 group-hover:bg-brand-orange group-hover:w-7"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ============================================================
+    SEKSIYA 1: THE GRAND ENTRANCE (ASOSIY GEROY)
+    3000+ QATORLI SUPER ZAMONAVIY DIZAYN
+    ============================================================ -->
+    <section id="hero-section" class="relative w-full bg-brand-dark overflow-hidden flex items-center justify-center min-h-screen">
+        
+        <!-- ============================================================
+        1. FON QATLAMLARI (KO'P QATLAMLI PARALLAKS)
+        ============================================================ -->
+        <!-- Qatlam 1: Chuqur ko'k/nil tusli yorug'lik -->
+        <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-brand-blue rounded-full blur-[120px] opacity-20 mix-blend-overlay animate-pulse-glow pointer-events-none"></div>
+        
+        <!-- Qatlam 2: Issiq to'q sariq rang -->
+        <div class="absolute bottom-0 right-0 -translate-x-1/4 translate-y-1/2 w-[60vw] h-[60vw] bg-brand-orange rounded-full blur-[120px] opacity-20 mix-blend-overlay animate-floating-slow pointer-events-none"></div>
+        
+        <!-- Qatlam 3: Yumshoq Nil rangi -->
+        <div class="absolute top-1/3 right-1/3 w-[40vw] h-[40vw] bg-brand-nile rounded-full blur-[80px] opacity-15 mix-blend-screen animate-floating-reverse pointer-events-none"></div>
+
+        <!-- ============================================================
+        2. HERO ASOSIY KONTENTI (TO'LIQ ADAPTIVLIK)
+        ============================================================ -->
+        <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 hero-grid-layout">
+            
+            <!-- ================= CHAP QISM (MATN) ================= -->
+            <div class="hero-col-left flex flex-col space-y-5 md:space-y-6 lg:space-y-8 xl:space-y-10 w-full">
+
+                <!-- Mega-Sarlavhalar -->
+                <div class="space-y-1 md:space-y-2 animate-hero-title w-full relative z-20">
+                    <h1 class="text-[2.8rem] min-[400px]:text-[3.5rem] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[7.5rem] xl:text-[9rem] 2xl:text-[11rem] font-black leading-[0.8] tracking-[-0.04em] text-brand-white drop-shadow-2xl w-full uppercase">
+                        MILLIY
+                    </h1>
+                    <h2 class="text-[1.5rem] min-[400px]:text-[2rem] sm:text-[2.5rem] md:text-[3rem] lg:text-[4.5rem] xl:text-[5.5rem] 2xl:text-[6.5rem] font-light tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] text-brand-nile ml-1 sm:ml-2 w-full uppercase">
+                        PREMIER HOUSE
+                    </h2>
+                </div>
+
+                <!-- Brend tavsifi (Uzbek tilida) -->
+                <p class="max-w-full md:max-w-md lg:max-w-lg xl:max-w-xl text-[0.95rem] sm:text-sm md:text-base lg:text-lg xl:text-xl text-brand-white/60 font-light leading-[1.6] sm:leading-relaxed animate-hero-subtitle tracking-wide relative z-20">
+                    <span class="block font-medium text-brand-white/80 mb-1">Milliy an'analar va zamonaviy texnologiyalarni birlashtirgan arxitektura byurosi.</span> 
+                    2018-yildan beri kelajak uylarini qurishga yordam beramiz. Tabiat va taraqqiyot bilan uyg'unlikda yashash uchun ilhomlantiradigan makonlar yaratamiz.
+                </p>
+
+                <!-- Call To Action Tugmalari -->
+                <div class="flex flex-col sm:flex-row gap-4 pt-4 animate-hero-btn btn-group-hero w-full relative z-20">
+                    <a href="projects.html" class="btn-glow-orange inline-flex items-center justify-center gap-3 bg-brand-orange text-brand-dark px-8 py-3.5 md:px-10 md:py-4 rounded-full font-semibold text-sm sm:text-base tracking-wide transition-all duration-300 shadow-[0_0_30px_rgba(230,192,130,0.2)]">
+                        <span>Loyihalarni ko'rish</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                    </a>
+                    <a href="about.html" class="btn-glow-glass inline-flex items-center justify-center gap-3 text-brand-white/80 hover:text-brand-white px-8 py-3.5 md:px-10 md:py-4 rounded-full font-medium text-sm sm:text-base transition-all duration-300 border border-brand-white/20 hover:border-brand-white/50 bg-brand-white/5 backdrop-blur-sm">
+                        <span>Biz haqimizda</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    </a>
+                </div>
+
+                <!-- Statistika bloki -->
+                <div class="flex items-center gap-4 sm:gap-8 pt-6 sm:pt-8 border-t border-brand-white/10 w-full max-w-md animate-stats stats-group-hero relative z-20">
+                    <div class="flex flex-col">
+                        <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-white">2018</span>
+                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Asos solingan yil</span>
+                    </div>
+                    <div class="w-px h-8 sm:h-10 lg:h-12 bg-brand-white/20"></div>
+                    <div class="flex flex-col">
+                        <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-orange">8+</span>
+                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Tajriba yili</span>
+                    </div>
+                    <div class="w-px h-8 sm:h-10 lg:h-12 bg-brand-white/20 hidden sm:block"></div>
+                    <div class="flex flex-col hidden sm:flex">
+                        <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-nile">30+</span>
+                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Amalga oshirilgan loyihalar</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ================= O'NG QISM (3D VIZUALIZATSIYA) ================= -->
+            <div class="hero-col-right relative w-full">
+                <div class="relative w-full h-full flex items-center justify-center 2xl:scale-110">
+                    
+                    <!-- 3D Shisha/Staklen effektli blok -->
+                    <div class="absolute inset-0 glass-morph rounded-3xl transform rotate-6 skew-x-6 z-0 border border-brand-white/5 opacity-40 w-[80%] h-[80%] mx-auto my-auto"></div>
+                    <div class="absolute inset-0 glass-morph rounded-3xl transform -rotate-3 skew-y-6 z-0 border border-brand-blue/10 opacity-30 w-[60%] h-[60%] mx-auto my-auto"></div>
+
+                    <!-- Murakkab 3D SVG Geometrik labirint -->
+                    <svg class="w-[130%] lg:w-[110%] xl:w-[120%] h-[130%] object-contain svg-ornament transition-transform duration-100 drop-shadow-2xl relative z-10" viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg" data-speed="-0.02">
+                        <defs>
+                            <linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#337AC1" stop-opacity="0.7" />
+                                <stop offset="100%" stop-color="#A7CBDB" stop-opacity="0.1" />
+                            </linearGradient>
+                            <linearGradient id="gradOrange" x1="100%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" stop-color="#E6C082" stop-opacity="0.6" />
+                                <stop offset="100%" stop-color="#337AC1" stop-opacity="0" />
+                            </linearGradient>
+                            <filter id="glowSvg" x="-50%" y="-50%" width="200%" height="200%">
+                                <feGaussianBlur stdDeviation="15" result="blur"/>
+                                <feMerge>
+                                    <feMergeNode in="blur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                        
+                        <!-- Arkalar va elementlar -->
+                        <path d="M 100 800 L 100 400 Q 100 150 300 150 Q 500 150 500 400 L 500 800" fill="none" stroke="url(#gradBlue)" stroke-width="14" filter="url(#glowSvg)"/>
+                        <path d="M 140 800 L 140 400 Q 140 200 300 200 Q 460 200 460 400 L 460 800" fill="none" stroke="url(#gradOrange)" stroke-width="8" />
+                        <path d="M 180 800 L 180 400 Q 180 280 300 280 Q 420 280 420 400 L 420 800" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3" stroke-dasharray="10 10"/>
+                        <path d="M 220 800 L 220 400 Q 220 320 300 320 Q 380 320 380 400 L 380 800" fill="none" stroke="rgba(167, 203, 219, 0.3)" stroke-width="1" />
+                        
+                        <!-- Yonayotgan kristall (M logotipining abstraktsiyasi) -->
+                        <path d="M 200 400 L 300 220 L 400 400 L 300 580 Z" fill="rgba(51, 122, 193, 0.15)" stroke="rgba(230, 192, 130, 0.5)" stroke-width="5" filter="url(#glowSvg)"/>
+                        <path d="M 240 400 L 300 280 L 360 400 L 300 520 Z" fill="rgba(167, 203, 219, 0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
+                        <path d="M 270 400 L 300 330 L 330 400 L 300 470 Z" fill="rgba(230, 192, 130, 0.05)" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
+                        
+                        <!-- Dekorativ chiziqlar -->
+                        <line x1="0" y1="600" x2="600" y2="600" stroke="rgba(255,255,255,0.05)" stroke-width="2" stroke-dasharray="5 15"/>
+                        <circle cx="300" cy="400" r="150" fill="none" stroke="rgba(51, 122, 193, 0.05)" stroke-width="10" stroke-dasharray="20 10" />
+                        <circle cx="300" cy="400" r="180" fill="none" stroke="rgba(230, 192, 130, 0.03)" stroke-width="2" />
+                    </svg>
+                </div>
+            </div>
+
+            <!-- ================= MOBIL GRAFIKA (FAQAT TELEFONLAR UCHUN) ================= -->
+            <div class="mobile-only-graphic animate-mobile-graphic relative z-20">
+                <svg class="w-full h-auto max-w-[300px] opacity-40 drop-shadow-xl" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M 30 200 L 30 100 Q 30 30 150 30 Q 270 30 270 100 L 270 200" fill="none" stroke="#337AC1" stroke-width="5" stroke-opacity="0.8"/>
+                    <path d="M 60 200 L 60 100 Q 60 60 150 60 Q 240 60 240 100 L 240 200" fill="none" stroke="#E6C082" stroke-width="2" stroke-opacity="0.6"/>
+                    <path d="M 90 200 L 90 100 Q 90 80 150 80 Q 210 80 210 100 L 210 200" fill="none" stroke="#A7CBDB" stroke-width="1.5" stroke-dasharray="4 4" stroke-opacity="0.4"/>
+                    <circle cx="150" cy="100" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4" />
+                </svg>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- ============================================================
+    ================================================================================
+    JAVASCRIPT SKRIPTS (NAVIGATSIYA, PARALLAKS, KURSOR, PRELOADER)
+    ================================================================================
+    ============================================================ -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // ============================================================
+            // 1. CUSTOM KURSOR (3D GLOW EFFECT)
+            // ============================================================
+            const cursorDot = document.getElementById('custom-cursor-dot');
+            const cursorOutline = document.getElementById('custom-cursor-outline');
+            let mouseX = -100, mouseY = -100;
+            let outlineX = -100, outlineY = -100;
+
+            // Standart kursorni elementlarga yashirish
+            document.querySelectorAll('a, button, input, textarea').forEach(el => {
+                el.addEventListener('mouseenter', () => {
+                    cursorOutline.classList.add('hover-glow');
+                });
+                el.addEventListener('mouseleave', () => {
+                    cursorOutline.classList.remove('hover-glow');
+                });
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+                cursorDot.style.left = mouseX + 'px';
+                cursorDot.style.top = mouseY + 'px';
+            });
+
+            // Silliq kuzatish (Leading lag effect)
+            function animateCursor() {
+                outlineX += (mouseX - outlineX) * 0.12;
+                outlineY += (mouseY - outlineY) * 0.12;
+                cursorOutline.style.left = outlineX + 'px';
+                cursorOutline.style.top = outlineY + 'px';
+                requestAnimationFrame(animateCursor);
+            }
+            animateCursor();
+
+            // ============================================================
+            // 2. KANVAS ASOSIDAGI ZARRACHALAR TIZIMI (MOUSE BILAN HARAKAT)
+            // ============================================================
+            const canvas = document.createElement('canvas');
+            canvas.id = 'particle-canvas';
+            canvas.style.position = 'absolute';
+            canvas.style.top = '0';
+            canvas.style.left = '0';
+            canvas.style.width = '100%';
+            canvas.style.height = '100%';
+            canvas.style.pointerEvents = 'none';
+            canvas.style.zIndex = '0';
+            
+            const heroSection = document.getElementById('hero-section');
+            heroSection.insertBefore(canvas, heroSection.firstChild);
+
+            const ctx = canvas.getContext('2d');
+            let width, height;
+            let particles = [];
+            const particleCount = 120;
+
+            function resizeCanvas() {
+                width = canvas.width = window.innerWidth;
+                height = canvas.height = window.innerHeight;
+            }
+            window.addEventListener('resize', resizeCanvas);
+            resizeCanvas();
+
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * width;
+                    this.y = Math.random() * height;
+                    this.vx = (Math.random() - 0.5) * 0.5;
+                    this.vy = (Math.random() - 0.5) * 0.5;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.opacity = Math.random() * 0.4 + 0.1;
+                    this.color = Math.random() > 0.6 ? '#E6C082' : (Math.random() > 0.5 ? '#337AC1' : '#A7CBDB');
+                }
+                update() {
+                    this.x += this.vx;
+                    this.y += this.vy;
+                    if (this.x < 0 || this.x > width) this.vx *= -1;
+                    if (this.y < 0 || this.y > height) this.vy *= -1;
+                }
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.shadowColor = this.color;
+                    ctx.shadowBlur = 10;
+                    ctx.globalAlpha = this.opacity;
+                    ctx.fill();
+                }
+            }
+
+            for (let i = 0; i < particleCount; i++) {
+                particles.push(new Particle());
+            }
+
+            let mouse = { x: null, y: null };
+            heroSection.addEventListener('mousemove', (e) => {
+                const rect = heroSection.getBoundingClientRect();
+                mouse.x = e.clientX - rect.left;
+                mouse.y = e.clientY - rect.top;
+            });
+            heroSection.addEventListener('mouseleave', () => {
+                mouse.x = null;
+                mouse.y = null;
+            });
+
+            function animateParticles() {
+                ctx.clearRect(0, 0, width, height);
+                
+                particles.forEach((p, index) => {
+                    p.update();
+                    p.draw();
+
+                    // Mouse bilan yaqinlashganda particlelarni tortish effekti
+                    if (mouse.x !== null) {
+                        const dx = mouse.x - p.x;
+                        const dy = mouse.y - p.y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        if (distance < 150) {
+                            const force = (150 - distance) / 300;
+                            p.vx -= dx * force * 0.015;
+                            p.vy -= dy * force * 0.015;
+                            // Tezlikni cheklash
+                            const maxSpeed = 4;
+                            const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                            if (speed > maxSpeed) {
+                                p.vx = (p.vx / speed) * maxSpeed;
+                                p.vy = (p.vy / speed) * maxSpeed;
+                            }
+                        }
+                    }
+
+                    // Particles o'zaro chiziqlar bilan bog'lanishi (Network effect)
+                    for (let j = index + 1; j < particles.length; j++) {
+                        const p2 = particles[j];
+                        const dx = p.x - p2.x;
+                        const dy = p.y - p2.y;
+                        const dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 120) {
+                            ctx.beginPath();
+                            ctx.moveTo(p.x, p.y);
+                            ctx.lineTo(p2.x, p2.y);
+                            ctx.strokeStyle = `rgba(167, 203, 219, ${0.08 * (1 - dist / 120)})`;
+                            ctx.lineWidth = 0.5;
+                            ctx.stroke();
+                        }
+                    }
+                });
+                requestAnimationFrame(animateParticles);
+            }
+            animateParticles();
+
+            // ============================================================
+            // 3. PRELOADER (YUKLASH ANIMATSIYASI)
+            // ============================================================
+            const preloader = document.getElementById('preloader');
+            setTimeout(() => {
+                preloader.classList.add('hidden-loader');
+                setTimeout(() => {
+                    preloader.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                }, 1400);
+            }, 2400);
+
+            // ============================================================
+            // 4. NAVBAR (AYLANTIRISH EFFEKTI)
+            // ============================================================
+            const header = document.getElementById('site-header');
+            window.addEventListener('scroll', () => {
+                const scrollY = window.scrollY;
+                if (scrollY > 80) {
+                    header.classList.add('navbar-scrolled');
+                } else {
+                    header.classList.remove('navbar-scrolled');
+                }
+            });
+
+            // ============================================================
+            // 5. MOBIL MENYU (OCHISH/YOPISH)
+            // ============================================================
+            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            const closeMenuBtn = document.getElementById('close-menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu-overlay');
+
+            const toggleMenu = (open) => {
+                if (open) {
+                    mobileMenu.classList.add('open');
+                    document.body.style.overflow = 'hidden';
+                } else {
+                    mobileMenu.classList.remove('open');
+                    document.body.style.overflow = 'auto';
+                }
+            };
+
+            mobileMenuBtn.addEventListener('click', () => toggleMenu(true));
+            closeMenuBtn.addEventListener('click', () => toggleMenu(false));
+            
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', () => toggleMenu(false));
+            });
+            mobileMenu.addEventListener('click', (e) => {
+                if (e.target === mobileMenu) toggleMenu(false);
+            });
+
+            // ============================================================
+            // 6. PARALLAKS (SICHQONCHA HARAKATI)
+            // ============================================================
+            const ornaments = document.querySelectorAll('.svg-ornament');
+            const blurSpheres = document.querySelectorAll('.swirl-orange, .swirl-blue, .animate-floating-slow, .animate-floating-reverse');
+
+            if (heroSection) {
+                heroSection.addEventListener('mousemove', (e) => {
+                    const rect = heroSection.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width - 0.5;
+                    const y = (e.clientY - rect.top) / rect.height - 0.5;
+
+                    ornaments.forEach((el) => {
+                        const speed = parseFloat(el.getAttribute('data-speed')) || 0.02;
+                        const moveX = x * 80 * speed;
+                        const moveY = y * 80 * speed;
+                        el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                        el.style.opacity = 0.7;
+                        clearTimeout(el._timeout);
+                        el._timeout = setTimeout(() => { el.style.opacity = 0.15; }, 500);
+                    });
+
+                    blurSpheres.forEach((el) => {
+                        const speed = 0.02;
+                        const moveX = x * 40 * speed;
+                        const moveY = y * 40 * speed;
+                        el.style.transform = `translate(${moveX}px, ${moveY}px)`;
+                    });
+                });
+
+                heroSection.addEventListener('mouseleave', () => {
+                    ornaments.forEach((el) => {
+                        el.style.transform = 'translate(0, 0)';
+                        el.style.opacity = 0.15;
+                    });
+                    blurSpheres.forEach((el) => {
+                        el.style.transform = 'translate(0, 0)';
+                    });
+                });
+            }
+        });
+    </script>
+
+    <!-- ============================================================
+SEKSIYA 2: BIZ HAQIMIZDA (HISTORY & HERITAGE)
+O'NG TOMONDA PARALLAKS EFFEKTLI RASM, CHAPDA MATN
+============================================================ -->
+<section id="about" class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48">
+    
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90vw] h-[90vw] bg-brand-nile rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-brand-orange rounded-full blur-[140px] opacity-5 mix-blend-overlay pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 xl:gap-24 2xl:gap-32 items-center">
+            
+            <div class="flex flex-col space-y-6 lg:space-y-8 xl:space-y-10 w-full order-2 lg:order-1">
+                <div class="flex items-center gap-3">
+                    <span class="h-[1px] w-8 sm:w-12 bg-brand-orange/60"></span>
+                    <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-white/40 font-light">Biz haqimizda</span>
+                </div>
+
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                    <span class="text-brand-orange block">Estetika</span>
+                    va funksiyaning <br class="hidden sm:block">
+                    mukammal uyg'unligi
+                </h2>
+
+                <p class="max-w-full lg:max-w-xl text-[0.95rem] sm:text-base lg:text-lg xl:text-xl text-brand-white/60 font-light leading-[1.6] sm:leading-relaxed tracking-wide">
+                    2018-yildan beri Milliy Premier House arxitektura va dizayn sohasida o'ziga xos yo'nalishni yaratib kelmoqda. 
+                    Biz nafaqat imoratlar, balki avlodlar davomida saqlanib qoladigan ma'naviy va estetik qadriyatlarni qurishga intilamiz. 
+                    Har bir loyihada biz tarixdan ilhom olamiz va innovatsiyalarni singdiramiz.
+                </p>
+
+                <div class="flex flex-wrap gap-4 sm:gap-6 pt-4">
+                    <div class="flex flex-col space-y-1">
+                        <span class="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-white">8+</span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/30 font-light">Yillik muvaffaqiyat</span>
+                    </div>
+                    <div class="hidden sm:block w-px h-10 bg-brand-white/5"></div>
+                    <div class="flex flex-col space-y-1">
+                        <span class="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-orange">95%</span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/30 font-light">Mijozlar ishonchi</span>
+                    </div>
+                    <div class="hidden sm:block w-px h-10 bg-brand-white/5"></div>
+                    <div class="flex flex-col space-y-1">
+                        <span class="text-3xl sm:text-4xl lg:text-5xl font-bold text-brand-nile">30+</span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/30 font-light">Tugallangan loyiha</span>
+                    </div>
+                </div>
+
+                <a href="about.html" class="inline-flex items-center gap-3 border-b border-brand-white/20 pb-1 text-brand-white/80 hover:text-brand-orange hover:border-brand-orange transition-colors duration-300 text-sm sm:text-base font-medium tracking-wide group">
+                    <span>Ko'proq ma'lumot oling</span>
+                    <svg class="w-4 h-4 transform transition-transform duration-300 group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
+                </a>
+            </div>
+
+            <div class="relative w-full h-[350px] sm:h-[450px] md:h-[500px] lg:h-[600px] xl:h-[700px] 2xl:h-[800px] bg-brand-blue/10 rounded-[40px] sm:rounded-[50px] lg:rounded-[60px] overflow-hidden group order-1 lg:order-2">
+                
+                <div class="absolute inset-0 bg-gradient-to-br from-brand-dark/40 to-brand-dark/80 z-10 mix-blend-multiply pointer-events-none"></div>
+                
+                <div class="absolute inset-0 flex items-center justify-center z-20 pointer-events-none">
+                    <svg class="w-[80%] h-[80%] text-brand-white/10 animate-pulse" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="300" height="300" fill="none" stroke="currentColor" stroke-width="2" />
+                        <path d="M 50 250 L 200 100 L 350 250" fill="none" stroke="currentColor" stroke-width="2" />
+                        <line x1="200" y1="100" x2="200" y2="350" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5"/>
+                        <line x1="50" y1="200" x2="350" y2="200" stroke="currentColor" stroke-width="1" stroke-dasharray="5 5"/>
+                        <circle cx="200" cy="200" r="100" fill="none" stroke="currentColor" stroke-width="1" stroke-dasharray="10 10"/>
+                    </svg>
+                </div>
+
+                <div class="absolute inset-0 z-30 flex flex-col items-center justify-center p-6 sm:p-10 text-center space-y-4 bg-gradient-to-t from-brand-dark/90 via-transparent to-transparent">
+                    <span class="text-xs tracking-[0.3em] text-brand-orange/80 uppercase">Est. 2018</span>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl font-light text-brand-white drop-shadow-2xl">Milliy Premier House</h3>
+                    <div class="w-16 h-[2px] bg-brand-orange/60 mx-auto"></div>
+                    <p class="text-brand-white/60 text-xs sm:text-sm max-w-xs mx-auto font-light tracking-wide">Arxitektura - bu san'at va hayot o'rtasidagi ko'prik</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 3: ILHOM SITATASI (ARCHITECTURAL QUOTE)
+BUGUNGI KUNDAGI FALSAFA
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-20 sm:py-24 lg:py-32 border-t border-brand-white/5 border-b border-brand-white/5">
+    
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
+        <span class="text-[20rem] sm:text-[30rem] lg:text-[40rem] font-bold text-brand-white leading-none select-none tracking-tighter">"</span>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        <div class="flex flex-col items-center justify-center text-center max-w-4xl mx-auto space-y-4 sm:space-y-6">
+            <div class="w-10 h-[1px] bg-brand-orange/50 mx-auto"></div>
+            <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-[4rem] 2xl:text-[5rem] font-light leading-[1.1] text-brand-white/90 tracking-wide">
+                Biz <span class="font-bold text-brand-white italic">binolar</span> emas, 
+                <br class="hidden sm:block">
+                <span class="text-brand-orange font-medium">hayot tarzi</span> quramiz.
+            </h2>
+            <div class="w-10 h-[1px] bg-brand-orange/50 mx-auto"></div>
+            <p class="text-sm sm:text-base lg:text-lg text-brand-white/40 font-light uppercase tracking-[0.3em] sm:tracking-[0.4em]">
+                — Milliy Premier House Falsafasi, 2026
+            </p>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 4: PORTFOLIO / LOYIHALAR (3D KARTALAR)
+============================================================ -->
+<section id="projects" class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48">
+    
+    <div class="absolute top-1/4 right-0 -translate-x-1/4 translate-y-1/4 w-[40vw] h-[40vw] bg-brand-blue rounded-full blur-[150px] opacity-10 mix-blend-overlay animate-floating-slow pointer-events-none"></div>
+    <div class="absolute bottom-1/4 left-0 translate-x-1/4 -translate-y-1/4 w-[50vw] h-[50vw] bg-brand-orange rounded-full blur-[140px] opacity-10 animate-floating-reverse pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col lg:flex-row items-end justify-between gap-6 lg:gap-10 mb-12 lg:mb-16 xl:mb-20">
+            <div class="flex flex-col space-y-3 lg:space-y-4 max-w-2xl">
+                <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Tanlangan loyihalar</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                    Arxitektura <span class="text-brand-nile font-light">san'ati</span>
+                </h2>
+                <p class="text-brand-white/50 font-light text-sm sm:text-base lg:text-lg max-w-md mt-2">
+                    Har bir loyiha bizning ishtiyoqimiz va milliy merosga bo'lgan hurmatimizning aksidir.
+                </p>
+            </div>
+            <a href="contacts.html" class="btn-glow-orange inline-flex items-center gap-2 bg-brand-orange text-brand-dark px-6 py-3 rounded-full font-semibold text-xs sm:text-sm tracking-wide transition-all duration-300 shadow-[0_0_30px_rgba(230,192,130,0.2)] shrink-0">
+                <span>Barcha loyihalar</span>
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-10">
+            
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-blue/10 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(51,122,193,0.2)] hover:-translate-y-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[70%] h-[70%] text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="50" y="100" width="300" height="200" rx="10" />
+                        <path d="M 50 250 L 150 200 L 250 250 L 350 180" />
+                        <circle cx="300" cy="150" r="15" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Turar-joy</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Milliy Kvartal</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xs">Zamonaviy va milliy uyg'unlikda yaratilgan uy-joy kompleksi</p>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-orange/10 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(230,192,130,0.2)] hover:-translate-y-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[70%] h-[70%] text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M 100 300 L 100 150 Q 100 50 200 50 Q 300 50 300 150 L 300 300" />
+                        <line x1="200" y1="300" x2="200" y2="150" />
+                        <line x1="100" y1="200" x2="300" y2="200" />
+                        <circle cx="200" cy="100" r="10" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Ijtimoiy</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Madaniyat Markazi</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xs">Tarix va innovatsiyalarni birlashtirgan noyob me'moriy yechim</p>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-nile/10 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(167,203,219,0.2)] hover:-translate-y-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[70%] h-[70%] text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <polygon points="200,80 320,250 80,250" />
+                        <line x1="80" y1="250" x2="80" y2="350" />
+                        <line x1="320" y1="250" x2="320" y2="350" />
+                        <line x1="200" y1="250" x2="200" y2="350" />
+                        <line x1="80" y1="300" x2="320" y2="300" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Biznes</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Premium Ofis</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xs">Zamonaviy biznes muhiti va estetik dizayn uyg'unligi</p>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-dark/80 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(0,0,0,0.5)] hover:-translate-y-2 lg:col-span-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[60%] h-[60%] text-brand-white/20" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="50" y="50" width="300" height="300" rx="20" />
+                        <rect x="100" y="100" width="200" height="200" rx="10" />
+                        <rect x="150" y="150" width="100" height="100" rx="5" />
+                        <circle cx="200" cy="200" r="40" />
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Premium</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Saroy Kompleksi</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xl">Hashamat va zamonaviylik uyg'unlashgan elita turar-joy majmuasi. O'zbek me'morchiligi va global dizayn tendentsiyalari.</p>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[350px] sm:h-[400px] md:h-[450px] lg:h-[500px] 2xl:h-[600px] rounded-2xl lg:rounded-3xl overflow-hidden bg-brand-blue/20 border border-brand-white/5 hover:border-brand-orange/20 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(51,122,193,0.2)] hover:-translate-y-2">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-brand-dark/90 z-10 opacity-80 group-hover:opacity-90 transition-opacity duration-500"></div>
+                <div class="absolute inset-0 flex items-center justify-center z-0 opacity-20 group-hover:scale-105 transition-transform duration-700 pointer-events-none">
+                    <svg class="w-[70%] h-[70%] text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M 150 350 L 150 150 L 250 100 L 350 150 L 350 350" />
+                        <path d="M 150 200 L 250 250 L 350 200" stroke-dasharray="5 5"/>
+                        <path d="M 150 250 L 250 300 L 350 250" stroke-dasharray="5 5"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="h-[2px] w-6 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.15em] text-brand-white/40">Ekologik</span>
+                    </div>
+                    <h3 class="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-medium text-brand-white tracking-tight">Yashil Uy</h3>
+                    <p class="text-brand-white/50 text-xs sm:text-sm font-light mt-1 max-w-xs">Tabiat bilan uyg'un, ekologik toza va energiya samarali turar-joy.</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 5: XIZMATLAR (ARXITEKTURA TRIPTIHI)
+============================================================ -->
+<section id="services" class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute inset-0 pointer-events-none opacity-10">
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120vw] h-[120vw] bg-brand-nile rounded-full blur-[200px] animate-pulse-glow"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col space-y-4 mb-14 lg:mb-20 xl:mb-24 max-w-3xl">
+            <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Bizning mahoratimiz</span>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                Uch <span class="text-brand-orange font-light">ustun</span> 
+                <br class="hidden sm:block">
+                mukammallik
+            </h2>
+            <p class="text-brand-white/50 font-light text-sm sm:text-base lg:text-lg max-w-xl mt-2">
+                Loyihani tugatishgacha bo'lgan yo'lda bizning professionalligimiz va estetik qarashlarimiz.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10 xl:gap-14 2xl:gap-16">
+            
+            <div class="group relative w-full h-[450px] sm:h-[500px] md:h-[600px] lg:h-[650px] 2xl:h-[750px] rounded-3xl lg:rounded-[40px] overflow-hidden bg-brand-dark/80 border border-brand-white/5 hover:border-brand-blue/40 transition-all duration-500 hover:shadow-[0_30px_80px_rgba(51,122,193,0.15)] flex flex-col justify-end p-8 sm:p-10 lg:p-12 xl:p-14">
+                
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] sm:w-[200px] lg:w-[300px] h-[150px] sm:h-[200px] lg:h-[300px] bg-brand-blue rounded-full blur-[80px] sm:blur-[100px] opacity-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-150 pointer-events-none"></div>
+                
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10 sm:opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                    <svg class="w-full h-full p-8 sm:p-10 lg:p-16 text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M 150 350 L 150 100 L 250 50 L 350 100 L 350 350" />
+                        <path d="M 150 150 L 250 200 L 350 150" stroke-dasharray="5 5"/>
+                        <path d="M 150 200 L 250 250 L 350 200" stroke-dasharray="5 5"/>
+                        <path d="M 150 250 L 250 300 L 350 250" stroke-dasharray="5 5"/>
+                        <circle cx="250" cy="100" r="15" fill="rgba(230, 192, 130, 0.3)" />
+                    </svg>
+                </div>
+
+                <div class="relative z-10 flex flex-col space-y-3 sm:space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="h-[2px] w-6 bg-brand-blue"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">01 / 03</span>
+                    </div>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-medium text-brand-white tracking-tight">Arxitektura</h3>
+                    <div class="w-12 h-[2px] bg-brand-orange/60 transition-all duration-500 group-hover:w-24"></div>
+                    <p class="text-brand-white/50 text-xs sm:text-sm lg:text-base font-light max-w-xs sm:max-w-sm lg:max-w-md leading-relaxed">
+                        Noyob va funksional binolar yaratish. Milliy an'analarni zamonaviy texnologiyalar bilan uyg'unlashtirish.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">3D Modellashtirish</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Bosh Rejalar</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[450px] sm:h-[500px] md:h-[600px] lg:h-[650px] 2xl:h-[750px] rounded-3xl lg:rounded-[40px] overflow-hidden bg-brand-dark/80 border border-brand-white/5 hover:border-brand-orange/40 transition-all duration-500 hover:shadow-[0_30px_80px_rgba(230,192,130,0.15)] flex flex-col justify-end p-8 sm:p-10 lg:p-12 xl:p-14">
+                
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] sm:w-[200px] lg:w-[300px] h-[150px] sm:h-[200px] lg:h-[300px] bg-brand-orange rounded-full blur-[80px] sm:blur-[100px] opacity-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-150 pointer-events-none"></div>
+                
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10 sm:opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                    <svg class="w-full h-full p-8 sm:p-10 lg:p-16 text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <rect x="100" y="100" width="200" height="200" rx="20" />
+                        <rect x="130" y="130" width="140" height="140" rx="10" />
+                        <rect x="160" y="160" width="80" height="80" rx="5" />
+                        <circle cx="200" cy="200" r="30" />
+                        <path d="M 200 100 L 200 300 M 100 200 L 300 200" stroke-width="1" stroke-dasharray="4 4"/>
+                    </svg>
+                </div>
+
+                <div class="relative z-10 flex flex-col space-y-3 sm:space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="h-[2px] w-6 bg-brand-orange"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">02 / 03</span>
+                    </div>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-medium text-brand-white tracking-tight">Interyer</h3>
+                    <div class="w-12 h-[2px] bg-brand-orange/60 transition-all duration-500 group-hover:w-24"></div>
+                    <p class="text-brand-white/50 text-xs sm:text-sm lg:text-base font-light max-w-xs sm:max-w-sm lg:max-w-md leading-relaxed">
+                        Qulaylik va hashamat. Ichki makonlar - bu hayot tarzining ifodasi. Har bir detal mukammallik uchun.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Dizayn</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Yoritish</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Mebel</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full h-[450px] sm:h-[500px] md:h-[600px] lg:h-[650px] 2xl:h-[750px] rounded-3xl lg:rounded-[40px] overflow-hidden bg-brand-dark/80 border border-brand-white/5 hover:border-brand-nile/40 transition-all duration-500 hover:shadow-[0_30px_80px_rgba(167,203,219,0.15)] flex flex-col justify-end p-8 sm:p-10 lg:p-12 xl:p-14">
+                
+                <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150px] sm:w-[200px] lg:w-[300px] h-[150px] sm:h-[200px] lg:h-[300px] bg-brand-nile rounded-full blur-[80px] sm:blur-[100px] opacity-0 group-hover:opacity-60 transition-all duration-700 group-hover:scale-150 pointer-events-none"></div>
+                
+                <div class="absolute top-0 left-0 w-full h-full pointer-events-none opacity-10 sm:opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                    <svg class="w-full h-full p-8 sm:p-10 lg:p-16 text-brand-white" viewBox="0 0 400 400" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M 200 50 L 50 200 L 200 350 L 350 200 Z" />
+                        <circle cx="200" cy="200" r="60" />
+                        <circle cx="200" cy="200" r="40" />
+                        <circle cx="200" cy="200" r="20" />
+                        <path d="M 200 50 L 200 350 M 50 200 L 350 200" stroke-dasharray="3 3" stroke-width="1"/>
+                    </svg>
+                </div>
+
+                <div class="relative z-10 flex flex-col space-y-3 sm:space-y-4">
+                    <div class="flex items-center gap-3">
+                        <span class="h-[2px] w-6 bg-brand-nile"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">03 / 03</span>
+                    </div>
+                    <h3 class="text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-medium text-brand-white tracking-tight">Qurilish</h3>
+                    <div class="w-12 h-[2px] bg-brand-orange/60 transition-all duration-500 group-hover:w-24"></div>
+                    <p class="text-brand-white/50 text-xs sm:text-sm lg:text-base font-light max-w-xs sm:max-w-sm lg:max-w-md leading-relaxed">
+                        G'oyadan tortib to tayyor ob'ektgacha bo'lgan to'liq tsikl. Sifat va ishonchlilik bizning qurilish tamoyilimizdir.
+                    </p>
+                    <div class="flex flex-wrap gap-3 pt-2">
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Nazorat</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Muhandislik</span>
+                        <span class="text-[10px] px-3 py-1 border border-brand-white/10 rounded-full text-brand-white/30 tracking-wide">Tugatish</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 6: BIZNING TARIXIMIZ (CHRONOLOGY / TIMELINE)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute top-0 right-0 w-[60vw] h-[60vw] bg-brand-blue rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+    <div class="absolute bottom-0 left-0 w-[50vw] h-[50vw] bg-brand-orange rounded-full blur-[140px] opacity-5 mix-blend-overlay pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col space-y-4 mb-16 lg:mb-24 max-w-3xl">
+            <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Tarix sahifalari</span>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                Bizning <span class="text-brand-nile font-light">yo'limiz</span>
+            </h2>
+            <p class="text-brand-white/50 font-light text-sm sm:text-base lg:text-lg max-w-xl mt-2">
+                2018-yildan boshlab bugungi kunga qadar. Har bir yil o'ziga xos yutuq va ilhom manbai.
+            </p>
+        </div>
+
+        <div class="relative flex flex-col md:flex-row md:gap-12 lg:gap-16 xl:gap-20">
+            
+            <div class="hidden md:flex flex-col items-center shrink-0 relative z-20 pt-4">
+                <div class="w-[2px] h-full bg-gradient-to-b from-transparent via-brand-white/20 to-brand-nile/40 absolute top-0 left-1/2 -translate-x-1/2"></div>
+            </div>
+
+            <div class="flex flex-col w-full space-y-12 lg:space-y-16 relative z-10">
+                
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-orange ring-4 ring-brand-orange/20"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-orange ring-4 ring-brand-orange/20"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-orange tracking-tight">2018</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Tashkil etilishi</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Milliy Premier House arxitektura byurosi sifatida o'z faoliyatini boshladi. Birinchi loyiha, Birinchi muvaffaqiyat, Birinchi qadamlar.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-white/40 ring-4 ring-brand-white/10"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-white/40 ring-4 ring-brand-white/10"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-white/70 tracking-tight">2020</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Ilk yirik loyiha</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">"Milliy Kvartal" turar-joy kompleksi qurilishi boshlanib, byuro o'zining dizayn va qurilish imkoniyatlarini kengaytirdi.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-nile ring-4 ring-brand-nile/20"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-nile ring-4 ring-brand-nile/20"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-nile tracking-tight">2022</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Xalqaro e'tirof</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Byuroning dizayn ishlari MDH va Yevropa mamlakatlaridagi arxitektura forumlarida namoyish etildi.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-blue ring-4 ring-brand-blue/20"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-blue ring-4 ring-brand-blue/20"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-blue tracking-tight">2024</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Yangi imkoniyatlar</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Zamonaviy texnologiyalar, jumladan 3D modellashtirish va virtual reallik asosida dizayn jarayonlari joriy etildi.</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-4 sm:gap-6 lg:gap-10 items-start group">
+                    <div class="flex items-center gap-4 sm:flex-col sm:items-end sm:min-w-[80px] lg:min-w-[100px] shrink-0">
+                        <span class="hidden sm:block w-2 h-2 rounded-full bg-brand-orange/80 ring-4 ring-brand-orange/30"></span>
+                        <span class="block sm:hidden w-3 h-3 rounded-full bg-brand-orange/80 ring-4 ring-brand-orange/30"></span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-orange tracking-tight">2026</span>
+                    </div>
+                    <div class="flex-1 border-l sm:border-l-0 border-brand-white/10 pl-6 sm:pl-0 pb-6 sm:pb-0">
+                        <h4 class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white">Kelajak sari</h4>
+                        <p class="text-brand-white/50 text-sm font-light mt-1 sm:mt-2 max-w-md">Biz o'z faoliyatimizni davom ettirib, mintaqadagi etakchi arxitektura brendiga aylanishni maqsad qilganmiz.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 7: MIJOZLAR FIKRI (TESTIMONIALS)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-5">
+        <span class="text-[20rem] sm:text-[30rem] lg:text-[40rem] font-bold text-brand-white leading-none select-none tracking-tighter -rotate-6">"</span>
+    </div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] bg-brand-nile rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col lg:flex-row items-end justify-between gap-6 lg:gap-10 mb-14 lg:mb-20 xl:mb-24">
+            <div class="flex flex-col space-y-3 lg:space-y-4 max-w-2xl">
+                <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Mijozlarimiz fikri</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                    Biz haqimizda <span class="text-brand-nile font-light">deydilar</span>
+                </h2>
+            </div>
+            <div class="flex gap-3">
+                <button class="w-12 h-12 rounded-full border border-brand-white/10 flex items-center justify-center text-brand-white/40 hover:text-brand-white hover:border-brand-orange/50 transition-colors duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+                </button>
+                <button class="w-12 h-12 rounded-full border border-brand-white/10 flex items-center justify-center text-brand-white/40 hover:text-brand-white hover:border-brand-orange/50 transition-colors duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 xl:gap-10">
+            
+            <div class="group relative w-full p-8 sm:p-10 bg-brand-white/5 backdrop-blur-sm rounded-3xl border border-brand-white/5 hover:border-brand-orange/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(230,192,130,0.05)] hover:-translate-y-2">
+                <div class="flex items-center gap-1 mb-4">
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                </div>
+                <p class="text-brand-white/70 text-sm sm:text-base font-light leading-relaxed mb-6">"Milliy Premier House bilan ishlash juda oson va yoqimli. Ular nafaqat bizning fikrlarimizni tingladilar, balki bizning orzularimizni real hayotga aylantirdilar. Dizayn, qulaylik va estetika - hamma narsa mukammal!"</p>
+                <div class="flex items-center gap-3 pt-4 border-t border-brand-white/5">
+                    <div class="w-10 h-10 rounded-full bg-brand-blue/30 flex items-center justify-center text-brand-white/60 text-sm font-bold">B.E.</div>
+                    <div class="flex flex-col">
+                        <span class="text-xs sm:text-sm font-medium text-brand-white">Behruz E.</span>
+                        <span class="text-[10px] text-brand-white/30 uppercase tracking-wide">Yandex Map Rating</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full p-8 sm:p-10 bg-brand-white/5 backdrop-blur-sm rounded-3xl border border-brand-white/5 hover:border-brand-nile/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(167,203,219,0.05)] hover:-translate-y-2">
+                <div class="flex items-center gap-1 mb-4">
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                </div>
+                <p class="text-brand-white/70 text-sm sm:text-base font-light leading-relaxed mb-6">"Bizning ofisimizni loyihalashda Milliy Premier House jamoasi yuqori professional darajani namoyish etdi. Ularning qarashlari va minimalizmga bo'lgan muhabbati bizning kompaniyamiz qiyofasini o'zgartirdi."</p>
+                <div class="flex items-center gap-3 pt-4 border-t border-brand-white/5">
+                    <div class="w-10 h-10 rounded-full bg-brand-nile/30 flex items-center justify-center text-brand-white/60 text-sm font-bold">P.E.</div>
+                    <div class="flex flex-col">
+                        <span class="text-xs sm:text-sm font-medium text-brand-white">Pablo Emilon</span>
+                        <span class="text-[10px] text-brand-white/30 uppercase tracking-wide">Google Rating</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group relative w-full p-8 sm:p-10 bg-brand-white/5 backdrop-blur-sm rounded-3xl border border-brand-white/5 hover:border-brand-blue/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(51,122,193,0.05)] hover:-translate-y-2">
+                <div class="flex items-center gap-1 mb-4">
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                    <svg class="w-4 h-4 text-brand-orange" fill="currentColor" viewBox="0 0 24 24"><path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/></svg>
+                </div>
+                <p class="text-brand-white/70 text-sm sm:text-base font-light leading-relaxed mb-6">"Milliy Premier House tomonidan qurilgan uyimizda yashash - bu orzu. Ular bizning barcha talablarimizni inobatga olishdi, qo'shimcha ravishda juda chiroyli va amaliy echimlarni taklif qilishdi. Hamma narsa yuqori darajada."</p>
+                <div class="flex items-center gap-3 pt-4 border-t border-brand-white/5">
+                    <div class="w-10 h-10 rounded-full bg-brand-orange/30 flex items-center justify-center text-brand-white/60 text-sm font-bold">S.D.</div>
+                    <div class="flex flex-col">
+                        <span class="text-xs sm:text-sm font-medium text-brand-white">Sardor D.</span>
+                        <span class="text-[10px] text-brand-white/30 uppercase tracking-wide">Yandex Map Rating</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 8: BOG'LANISH, 360 TUR VA VIDEO FON
+============================================================ -->
+
+<!-- ============================================================
+SEKSIYA 11: VIDEO GALEREYA (KINEMATOGRAFIK MONTAJ)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute top-1/2 left-1/4 -translate-x-1/2 -translate-y-1/2 w-[40vw] h-[40vw] bg-brand-blue rounded-full blur-[120px] opacity-10 animate-floating-slow"></div>
+        <div class="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-[50vw] h-[50vw] bg-brand-orange rounded-full blur-[120px] opacity-10 animate-floating-reverse"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col space-y-4 mb-14 lg:mb-20 xl:mb-24 max-w-3xl">
+            <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Vizual meros</span>
+            <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                Arxitektura <span class="text-brand-nile font-light">harakatda</span>
+            </h2>
+            <p class="text-brand-white/50 font-light text-sm sm:text-base lg:text-lg max-w-xl mt-2">
+                Loyihalarimizning haqiqiy nafasini his eting. Har bir kadr bizning estetikamiz va sifatimizning guvohidir.
+            </p>
+        </div>
+
+        <!-- 2 ASOSIY VIDEO BLOK -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 2xl:gap-12 items-stretch">
+            
+            <!-- VIDEO 1: Bg-video-of-mph.uz.mp4 -->
+            <div class="group relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[650px] rounded-2xl lg:rounded-[30px] overflow-hidden border border-brand-white/5 hover:border-brand-blue/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(51,122,193,0.15)]">
+                
+                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-105 transition-transform duration-700">
+                    <source src="bg-video-of-mph.uz.mp4" type="video/mp4">
+                </video>
+                
+                <div class="absolute inset-0 bg-brand-dark/40 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent z-10 pointer-events-none"></div>
+                
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col items-start">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="h-[2px] w-8 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">01 / 02</span>
+                    </div>
+                    <span class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white tracking-tight">Atmosfera</span>
+                    <p class="text-brand-white/60 text-xs sm:text-sm font-light mt-1 max-w-xs lg:max-w-sm">Brend falsafasining yaratgan dizayn va atmosferasi</p>
+                </div>
+            </div>
+
+            <!-- VIDEO 2: Gallery-for-mph.mp4 -->
+            <div class="group relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[550px] xl:h-[600px] 2xl:h-[650px] rounded-2xl lg:rounded-[30px] overflow-hidden border border-brand-white/5 hover:border-brand-orange/30 transition-all duration-500 hover:shadow-[0_20px_60px_rgba(230,192,130,0.15)]">
+                
+                <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0 group-hover:scale-105 transition-transform duration-700">
+                    <source src="gallery-for-mph.mp4" type="video/mp4">
+                </video>
+                
+                <div class="absolute inset-0 bg-brand-dark/40 bg-gradient-to-t from-brand-dark/80 via-transparent to-transparent z-10 pointer-events-none"></div>
+                
+                <div class="absolute bottom-0 left-0 right-0 z-20 p-6 sm:p-8 lg:p-10 xl:p-12 flex flex-col items-start">
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="h-[2px] w-8 bg-brand-orange/80"></span>
+                        <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/40 font-light">02 / 02</span>
+                    </div>
+                    <span class="text-lg sm:text-xl lg:text-2xl font-medium text-brand-white tracking-tight">Dizayn</span>
+                    <p class="text-brand-white/60 text-xs sm:text-sm font-light mt-1 max-w-xs lg:max-w-sm">Dizayn bosqichlaridan lavhalar</p>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 12: BIZ HAQIMIZDA YANA BIR BOR (FINAL BLOCK)
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-24 lg:py-32 xl:py-40 2xl:py-48 border-t border-brand-white/5">
+    
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vw] bg-brand-nile rounded-full blur-[150px] opacity-5 pointer-events-none"></div>
+    <div class="absolute bottom-0 right-0 w-[40vw] h-[40vw] bg-brand-blue rounded-full blur-[100px] opacity-5 mix-blend-overlay pointer-events-none"></div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col lg:flex-row items-start justify-between gap-12 lg:gap-16 xl:gap-20">
+            
+            <div class="flex flex-col space-y-6 lg:space-y-8 max-w-2xl">
+                <span class="text-[10px] sm:text-xs uppercase tracking-[0.2em] sm:tracking-[0.3em] text-brand-orange font-medium">Biz haqimizda</span>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-bold leading-[1.1] text-brand-white tracking-tight">
+                    Milliy <span class="text-brand-nile font-light">an'analar</span> <br class="hidden sm:block">
+                    va zamonaviy <span class="text-brand-orange font-light">kelajak</span>
+                </h2>
+                <p class="text-brand-white/60 font-light text-sm sm:text-base lg:text-lg max-w-lg leading-relaxed">
+                    Biz 2018-yildan beri O'zbekistonning me'moriy qiyofasini yangilash ustida ishlaymiz. 
+                    Milliy Premier House — bu nafaqat arxitektura, balki avlodlarga meros bo'lib qoladigan ijodiy falsafadir.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-2">
+                    <span class="inline-flex items-center gap-2 text-brand-white/40 text-xs uppercase tracking-widest">
+                        <span class="w-2 h-2 rounded-full bg-brand-orange"></span> 8+ yillik tajriba
+                    </span>
+                    <span class="inline-flex items-center gap-2 text-brand-white/40 text-xs uppercase tracking-widest">
+                        <span class="w-2 h-2 rounded-full bg-brand-nile"></span> 30+ loyiha
+                    </span>
+                </div>
+            </div>
+
+            <div class="flex flex-col space-y-6 w-full max-w-md lg:max-w-sm shrink-0">
+                <div class="relative p-6 sm:p-8 rounded-2xl lg:rounded-3xl border border-brand-white/5 bg-brand-white/5 backdrop-blur-sm hover:border-brand-orange/30 transition-all duration-300">
+                    <div class="flex flex-col space-y-3">
+                        <span class="text-brand-white/30 text-xs uppercase tracking-widest">Asosiy manzil</span>
+                        <span class="text-brand-white text-sm sm:text-base font-light">Toshkent, Olmazor tumani, <br>Sebzor ko'chasi, Milliy Premier Office</span>
+                    </div>
+                </div>
+                <div class="relative p-6 sm:p-8 rounded-2xl lg:rounded-3xl border border-brand-white/5 bg-brand-white/5 backdrop-blur-sm hover:border-brand-nile/30 transition-all duration-300">
+                    <div class="flex flex-col space-y-3">
+                        <span class="text-brand-white/30 text-xs uppercase tracking-widest">Ish vaqti</span>
+                        <span class="text-brand-white text-sm sm:text-base font-light">Dushanba — Juma: 09:00 – 18:00</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 13: IJTIMOIY TARMOQLAR VA BOG'LANISH
+============================================================ -->
+<section class="relative w-full bg-brand-dark overflow-hidden py-20 lg:py-28 border-t border-brand-white/5">
+    
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 lg:gap-6 xl:gap-8">
+            
+            <a href="https://www.instagram.com/milliy.interior/" class="group flex flex-col items-center justify-center p-8 lg:p-12 bg-brand-white/5 backdrop-blur-sm rounded-2xl border border-brand-white/5 hover:border-brand-blue/40 hover:bg-brand-blue/10 transition-all duration-300 hover:-translate-y-2">
+                <div class="w-12 h-12 rounded-full border border-brand-white/20 flex items-center justify-center text-brand-white/60 group-hover:text-brand-white group-hover:border-brand-white/60 transition-colors duration-300 mb-3">
+                    <span class="text-sm font-bold tracking-widest">IG</span>
+                </div>
+                <span class="text-brand-white/60 group-hover:text-brand-white text-xs uppercase tracking-widest transition-colors duration-300">Instagram</span>
+            </a>
+
+            <a href="https://t.me/milliypremier_bot" class="group flex flex-col items-center justify-center p-8 lg:p-12 bg-brand-white/5 backdrop-blur-sm rounded-2xl border border-brand-white/5 hover:border-brand-nile/40 hover:bg-brand-nile/10 transition-all duration-300 hover:-translate-y-2">
+                <div class="w-12 h-12 rounded-full border border-brand-white/20 flex items-center justify-center text-brand-white/60 group-hover:text-brand-white group-hover:border-brand-white/60 transition-colors duration-300 mb-3">
+                    <span class="text-sm font-bold tracking-widest">TG</span>
+                </div>
+                <span class="text-brand-white/60 group-hover:text-brand-white text-xs uppercase tracking-widest transition-colors duration-300">Telegram</span>
+            </a>
+            
+        </div>
+    </div>
+</section>
+
+<!-- ============================================================
+SEKSIYA 14: FOOTER (FINAL)
+============================================================ -->
+<footer class="relative w-full bg-brand-dark border-t border-brand-white/10 overflow-hidden py-12 lg:py-16 xl:py-20">
+    
+    <div class="absolute inset-0 pointer-events-none">
+        <div class="absolute bottom-0 left-0 w-[30vw] h-[30vw] bg-brand-nile rounded-full blur-[100px] opacity-5"></div>
+        <div class="absolute top-0 right-0 w-[20vw] h-[20vw] bg-brand-blue rounded-full blur-[100px] opacity-5"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-16 2xl:px-28">
+        
+        <div class="flex flex-col md:flex-row items-start justify-between gap-12 pb-12 border-b border-brand-white/10">
+            
+            <div class="flex flex-col space-y-4 max-w-sm">
+                <a href="#" class="flex items-center gap-2 group">
+                    <img src="logo.png" alt="Milliy Premier House" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-300 group-hover:scale-105">
+                    <span class="font-inter font-semibold text-sm tracking-[0.2em] text-brand-white/90 group-hover:text-brand-orange transition-colors duration-300 uppercase">
+                        MILLIY<span class="text-brand-nile font-light tracking-[0.3em] ml-1">PREMIER HOUSE</span>
+                    </span>
+                </a>
+                <p class="text-brand-white/30 text-xs font-light leading-relaxed">
+                    Milliy an'analar va zamonaviy texnologiyalarni birlashtirgan arxitektura byurosi.
+                </p>
+            </div>
+
+            <div class="flex flex-wrap gap-10 lg:gap-16">
+                
+                <div class="flex flex-col space-y-3">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/20 font-medium">Sahifalar</span>
+                    <ul class="flex flex-col space-y-2">
+                        <li><a href="about.html" class="text-brand-white/40 hover:text-brand-orange text-xs tracking-wide transition-colors duration-300">Biz haqimizda</a></li>
+                        <li><a href="projects.html" class="text-brand-white/40 hover:text-brand-orange text-xs tracking-wide transition-colors duration-300">Loyihalar</a></li>
+                        <li><a href="contacts.html" class="text-brand-white/40 hover:text-brand-orange text-xs tracking-wide transition-colors duration-300">Bog'lanish</a></li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col space-y-3">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/20 font-medium">Xizmatlar</span>
+                    <ul class="flex flex-col space-y-2">
+                        <li><span class="text-brand-white/40 text-xs tracking-wide">Arxitektura</span></li>
+                        <li><span class="text-brand-white/40 text-xs tracking-wide">Interyer dizayn</span></li>
+                        <li><span class="text-brand-white/40 text-xs tracking-wide">Qurilish nazorati</span></li>
+                    </ul>
+                </div>
+
+                <div class="flex flex-col space-y-3">
+                    <span class="text-[10px] uppercase tracking-[0.2em] text-brand-white/20 font-medium">Aloqa</span>
+                    <ul class="flex flex-col space-y-2">
+                        <li><a href="tel:+998712070013" class="text-brand-white/40 hover:text-brand-nile text-xs tracking-wide transition-colors duration-300">+998 71 207 00 13</a></li>
+                        <li><span class="text-brand-white/40 text-xs tracking-wide">Toshkent, Olmazor</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-brand-white/20 text-[10px] sm:text-xs tracking-wider uppercase">
+            <span>&copy; 2026 "MILLIY PREMIER HOUSE" MCHJ. Barcha huquqlar himoyalangan.</span>
+            <div class="flex items-center gap-6">
+
+                <span>Produced by <a href="https://eminov.uz" class="text-brand-orange hover:text-brand-nile">EMISOFT DIGITAL</a></span>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- ============================================================
+JAVASCRIPT: PROJECT FADE-IN ANIMATION
+============================================================ -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('opacity-100', 'translate-y-0');
+                    entry.target.classList.remove('opacity-0', 'translate-y-10');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.project-card, .service-card, .timeline-item').forEach(el => {
+            el.classList.add('opacity-0', 'translate-y-10', 'transition-all', 'duration-700', 'ease-out');
+            observer.observe(el);
+        });
+    });
+</script>
+
+</body>
+</html>
+
+</body>
