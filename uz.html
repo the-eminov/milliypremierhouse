@@ -1,25 +1,24 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <!-- ============================================================
-    BAZA SOZLAMALARI VA META-TEGLAR
-    ============================================================ -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
     <title>Milliy Premier House</title>
     <link rel="icon" href="logo.png">
     
-    <!-- Google Fonts Inter -->
+    <!-- Preload - faqat birinchi 5 ta rasm -->
+    <link rel="preload" as="image" href="collage/1 (2).webp" type="image/webp">
+    <link rel="preload" as="image" href="collage/1 (3).webp" type="image/webp">
+    <link rel="preload" as="image" href="collage/1 (4).webp" type="image/webp">
+    <link rel="preload" as="image" href="collage/1 (7).webp" type="image/webp">
+    <link rel="preload" as="image" href="collage/1 (9).webp" type="image/webp">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     
-    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
-        // ============================================================
-        // Tailwind rang palitrasi sozlamalari
-        // ============================================================
         tailwind.config = {
             theme: {
                 extend: {
@@ -33,44 +32,16 @@
                     fontFamily: {
                         inter: ['Inter', 'sans-serif'],
                     },
-                    animation: {
-                        'floating-slow': 'floating 10s infinite alternate ease-in-out',
-                        'floating-reverse': 'floatingReverse 7s infinite alternate ease-in-out',
-                        'pulse-glow': 'pulseGlow 4s infinite alternate',
-                        'spin-slow': 'spin 25s linear infinite',
-                    },
-                    keyframes: {
-                        floating: {
-                            '0%': { transform: 'translateY(0px) scale(1) rotate(0deg)' },
-                            '100%': { transform: 'translateY(-40px) scale(1.05) rotate(5deg)' },
-                        },
-                        floatingReverse: {
-                            '0%': { transform: 'translateY(0px) scale(1) rotate(0deg)' },
-                            '100%': { transform: 'translateY(40px) scale(1.05) rotate(-5deg)' },
-                        },
-                        pulseGlow: {
-                            '0%': { opacity: 0.2, filter: 'blur(80px)' },
-                            '100%': { opacity: 0.6, filter: 'blur(120px)' },
-                        }
-                    }
                 }
             }
         }
     </script>
 
     <style>
-        /* ============================================================
-        GLOBAL CSS O'ZGARUVCHILAR VA QAYTA TIKLASH
-        ============================================================ */
         :root {
             --color-dark: #12214C;
             --color-white: #FFFFFF;
-            --color-blue: #337AC1;
-            --color-orange: #E6C082;
-            --color-nile: #A7CBDB;
             --nav-height: 80px;
-            --cursor-glow: rgba(51, 122, 193, 0.4);
-            --cursor-main: rgba(230, 192, 130, 0.8);
         }
         
         * {
@@ -85,9 +56,7 @@
             overflow-x: hidden;
             scroll-behavior: smooth;
         }
-        /* ============================================================
-        PRELOADER (YUKLASH EKRANI)
-        ============================================================ */
+
         #preloader {
             position: fixed;
             inset: 0;
@@ -97,13 +66,11 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            transition: opacity 1.4s cubic-bezier(0.77, 0, 0.175, 1), backdrop-filter 1.2s ease, transform 1.2s ease;
+            transition: opacity 1.4s cubic-bezier(0.77, 0, 0.175, 1);
             pointer-events: all;
         }
         #preloader.hidden-loader {
             opacity: 0;
-            backdrop-filter: blur(40px);
-            transform: scale(0.9);
             pointer-events: none;
         }
         
@@ -138,7 +105,7 @@
             top: 0;
             height: 100%;
             width: 100%;
-            background: linear-gradient(90deg, transparent, var(--color-blue), var(--color-orange), transparent);
+            background: linear-gradient(90deg, transparent, #337AC1, #E6C082, transparent);
             animation: loadingBar 2.2s ease-in-out forwards;
         }
         @keyframes loadingBar {
@@ -150,35 +117,27 @@
             100% { transform: scale(1.05) rotate(3deg); opacity: 1; }
         }
 
-        /* ============================================================
-        KIRISH ANIMATSIYALARI (FADE-UP & SLIDE)
-        ============================================================ */
         @keyframes fadeUp {
             from { opacity: 0; transform: translateY(80px) scale(0.95); }
             to { opacity: 1; transform: translateY(0) scale(1); }
         }
-        @keyframes slideRight {
-            from { opacity: 0; transform: translateX(-80px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
         @keyframes slideInLeft {
             from { opacity: 0; transform: translateX(-40px); }
             to { opacity: 1; transform: translateX(0); }
+        }
+        @keyframes fadeInItem {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
 
         .animate-hero-title { animation: fadeUp 1.2s cubic-bezier(0.23, 1, 0.320, 1) 2.0s both; }
         .animate-hero-subtitle { animation: fadeUp 1.0s cubic-bezier(0.23, 1, 0.320, 1) 2.4s both; }
         .animate-hero-btn { animation: fadeUp 1.0s cubic-bezier(0.23, 1, 0.320, 1) 2.8s both; }
         .animate-stats { animation: slideInLeft 0.8s cubic-bezier(0.23, 1, 0.320, 1) 3.2s both; }
-        .animate-mobile-graphic { animation: slideRight 1.2s cubic-bezier(0.23, 1, 0.320, 1) 2.4s both; }
 
-        /* ============================================================
-        NAVBAR VA MOBIL MENYU STILLARI
-        ============================================================ */
         .navbar-scrolled {
             background-color: rgba(18, 33, 76, 0.85) !important;
             backdrop-filter: blur(22px) !important;
-            -webkit-backdrop-filter: blur(22px) !important;
             border-bottom: 1px solid rgba(167, 203, 219, 0.15) !important;
             box-shadow: 0 4px 50px rgba(0, 0, 0, 0.4) !important;
         }
@@ -210,7 +169,6 @@
             inset: 0;
             background: rgba(18, 33, 76, 0.98);
             backdrop-filter: blur(25px);
-            -webkit-backdrop-filter: blur(25px);
             z-index: 100;
             display: flex;
             align-items: center;
@@ -240,150 +198,293 @@
             transform: translateX(10px);
         }
 
-        /* ============================================================
-        HERO BO'LIMI UCHUN RESPONSIVE GRID (ENG ASOSIY)
-        ============================================================ */
         .hero-grid-layout {
             display: flex;
-            flex-direction: column-reverse;
+            flex-direction: column;
             min-height: 100vh;
-            padding-top: 120px;
+            padding-top: 100px;
             padding-bottom: 40px;
             align-items: center;
             justify-content: center;
             width: 100%;
+            position: relative;
+            z-index: 5;
+            gap: 2rem;
         }
 
-        /* Planshetlar (768px dan) */
+        .hero-col-left {
+            width: 100%;
+            text-align: left;
+            align-items: flex-start;
+            flex-shrink: 0;
+        }
+
+        .hero-col-right {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem 0;
+            position: relative;
+            overflow: visible;
+        }
+
+        .collage-wrapper {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: auto;
+            gap: 12px;
+            padding: 15px;
+            width: 100%;
+            max-width: 650px;
+            position: relative;
+            max-height: 80vh;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .collage-wrapper::-webkit-scrollbar {
+            display: none;
+        }
+
+        .collage-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 0 2px rgba(255, 255, 255, 0.1);
+            background: rgba(18, 33, 76, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            opacity: 0;
+            animation: fadeInItem 0.5s ease forwards;
+            min-height: 80px;
+        }
+
+        .collage-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.5s ease;
+            background: #12214C;
+            will-change: transform;
+        }
+
+        .collage-item:hover {
+            transform: scale(1.05) !important;
+            z-index: 10;
+            box-shadow: 0 20px 60px rgba(230, 192, 130, 0.3), 0 0 0 3px rgba(230, 192, 130, 0.2);
+            border-color: #E6C082 !important;
+        }
+
+        .collage-item:hover img {
+            transform: scale(1.05);
+        }
+
+        .collage-item.clone {
+            opacity: 0.5;
+            border-color: rgba(255,255,255,0.1);
+        }
+        .collage-item.clone img {
+            filter: brightness(0.7) saturate(0.5);
+        }
+
+        .collage-item.loading {
+            background: linear-gradient(135deg, #1a2d5a, #12214C);
+            min-height: 150px;
+        }
+        
+        .collage-item.loading::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            animation: shimmer 1.5s infinite;
+        }
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .collage-container {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding-right: 0.5rem;
+        }
+
         @media (min-width: 768px) {
             .hero-grid-layout {
                 flex-direction: row;
                 min-height: 100vh;
                 padding-top: var(--nav-height);
-                padding-left: 2.5rem;
-                padding-right: 2.5rem;
-                gap: 4.5rem;
-            }
-            .hero-col-left {
-                width: 60%;
-                text-align: left;
-                align-items: flex-start;
-            }
-            .hero-col-right {
-                width: 40%;
-                display: flex;
-                justify-content: flex-end;
+                padding-left: 2rem;
+                padding-right: 2rem;
+                padding-bottom: 2rem;
+                gap: 3rem;
                 align-items: center;
-                height: 80vh;
             }
-            .mobile-only-graphic {
-                display: none !important;
-            }
+            .hero-col-left { width: 45%; max-width: 45%; padding-top: 10px; }
+            .hero-col-right { width: 55%; max-width: 55%; padding: 1rem 0; }
+            .collage-wrapper { max-width: 550px; gap: 10px; padding: 10px; max-height: 85vh; }
+            .collage-container { padding-right: 0; }
+            .collage-item { min-height: 100px; }
         }
 
-        /* Desktop (1024px dan) */
         @media (min-width: 1024px) {
-            .hero-grid-layout {
-                padding-left: 5rem;
-                padding-right: 5rem;
-                gap: 6rem;
-            }
-            .hero-col-left {
-                width: 55%;
-            }
-            .hero-col-right {
-                width: 45%;
-            }
+            .hero-grid-layout { padding-left: 4rem; padding-right: 4rem; gap: 4rem; }
+            .hero-col-left { width: 40%; max-width: 40%; padding-top: 20px; }
+            .hero-col-right { width: 60%; max-width: 60%; }
+            .collage-wrapper { max-width: 600px; gap: 12px; padding: 12px; max-height: 85vh; }
+            .collage-container { padding-right: 1rem; }
+            .collage-item { min-height: 120px; }
         }
 
-        /* Ultra-keng ekranlar (1536px dan) */
+        @media (min-width: 1280px) {
+            .hero-grid-layout { padding-left: 6rem; padding-right: 6rem; gap: 5rem; }
+            .hero-col-left { width: 38%; max-width: 38%; padding-top: 30px; }
+            .hero-col-right { width: 62%; max-width: 62%; }
+            .collage-wrapper { max-width: 700px; gap: 14px; padding: 14px; max-height: 85vh; }
+            .collage-container { padding-right: 2rem; }
+            .collage-item { min-height: 140px; }
+        }
+
         @media (min-width: 1536px) {
-            .hero-grid-layout {
-                padding-left: 14rem;
-                padding-right: 14rem;
-                gap: 10rem;
-                max-width: 2000px;
-                margin: 0 auto;
-            }
-            .hero-col-left {
-                width: 50%;
-            }
-            .hero-col-right {
-                width: 50%;
-            }
+            .hero-grid-layout { padding-left: 10rem; padding-right: 10rem; gap: 6rem; max-width: 2000px; margin: 0 auto; }
+            .hero-col-left { width: 35%; max-width: 35%; padding-top: 40px; }
+            .hero-col-right { width: 65%; max-width: 65%; }
+            .collage-wrapper { max-width: 800px; gap: 16px; padding: 16px; max-height: 85vh; }
+            .collage-container { padding-right: 3rem; }
+            .collage-item { min-height: 160px; }
         }
 
-        /* Mobil telefonlar (767px gacha) */
         @media (max-width: 767px) {
-            .hero-col-right {
-                display: none !important;
+            .hero-grid-layout { padding: 100px 1rem 2rem 1rem; gap: 1.5rem; }
+            .hero-col-left { max-width: 100%; padding-top: 5px; text-align: left; align-items: flex-start; }
+            .hero-col-right { max-width: 100%; padding: 0.5rem 0; }
+            .collage-wrapper {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 100%;
+                gap: 8px;
+                padding: 8px;
+                max-height: 50vh;
             }
-            .hero-col-left {
-                width: 100%;
-                padding: 0 1.5rem;
-                text-align: center;
-                align-items: center;
-            }
-            .mobile-only-graphic {
-                display: flex !important;
-                justify-content: center;
-                width: 100%;
-                max-width: 340px;
-                margin: 0 auto 30px auto;
-            }
-            .btn-group-hero {
-                justify-content: center !important;
-                width: 100% !important;
-                flex-direction: column !important;
-                align-items: stretch !important;
-            }
-            .btn-group-hero a {
-                width: 100%;
-                justify-content: center;
-                padding: 0.8rem 1.5rem;
-            }
-            .stats-group-hero {
-                justify-content: center !important;
-            }
+            .collage-item { min-height: 60px; }
+            .btn-group-hero { justify-content: flex-start !important; width: 100% !important; flex-direction: column !important; align-items: stretch !important; }
+            .btn-group-hero a { width: 100%; justify-content: center; padding: 0.8rem 1.5rem; }
+            .stats-group-hero { justify-content: flex-start !important; }
+            .collage-container { justify-content: center; padding-right: 0; }
         }
 
-        /* Juda kichik mobil ekranlar (400px dan 500px gacha) */
-        @media (min-width: 380px) and (max-width: 500px) {
-            .text-responsive-hero {
-                font-size: 2.8rem !important;
-                line-height: 0.9 !important;
-            }
-        }
-
-        /* ============================================================
-        ATMOSFERA UCHUN QO'SHIMCHA ANIMATSIYALAR VA FONLAR
-        ============================================================ */
-        .swirl-orange {
-            background: radial-gradient(circle, rgba(230, 192, 130, 0.4) 0%, rgba(18, 33, 76, 0) 70%);
-            mix-blend-mode: overlay;
-        }
-        .swirl-blue {
-            background: radial-gradient(circle, rgba(51, 122, 193, 0.5) 0%, rgba(18, 33, 76, 0) 70%);
-            mix-blend-mode: overlay;
-        }
-        .floating-particles {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            pointer-events: none;
+        #hero-section {
+            background-color: #12214C;
+            position: relative;
             overflow: hidden;
-            z-index: 1;
         }
         
+        #hero-section::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            background-image: url('mph-flag.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.45;
+            filter: brightness(0.7) saturate(0.8);
+        }
+        
+        #hero-section::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background-color: rgba(18, 33, 76, 0.55);
+        }
+
+        .hero-title-main {
+            font-size: 2.4rem;
+            line-height: 0.85;
+            letter-spacing: -0.03em;
+        }
+        .hero-title-sub {
+            font-size: 1.2rem;
+            line-height: 0.9;
+            letter-spacing: 0.08em;
+        }
+
+        @media (min-width: 400px) {
+            .hero-title-main { font-size: 3rem; }
+            .hero-title-sub { font-size: 1.6rem; }
+        }
+        @media (min-width: 640px) {
+            .hero-title-main { font-size: 3.8rem; }
+            .hero-title-sub { font-size: 2rem; }
+        }
+        @media (min-width: 768px) {
+            .hero-title-main { font-size: 4.2rem; }
+            .hero-title-sub { font-size: 2.2rem; }
+        }
+        @media (min-width: 1024px) {
+            .hero-title-main { font-size: 5rem; }
+            .hero-title-sub { font-size: 2.8rem; }
+        }
+        @media (min-width: 1280px) {
+            .hero-title-main { font-size: 6rem; }
+            .hero-title-sub { font-size: 3.2rem; }
+        }
+        @media (min-width: 1536px) {
+            .hero-title-main { font-size: 7rem; }
+            .hero-title-sub { font-size: 3.8rem; }
+        }
+
+        .hero-title-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 0.05rem;
+        }
+
+        #particle-canvas {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            pointer-events: none !important;
+            z-index: 2 !important;
+        }
+        
+        .hero-content-wrapper {
+            position: relative;
+            z-index: 3;
+            width: 100%;
+        }
+
+        .collage-item[data-grid="span2"] {
+            grid-column: span 2;
+        }
+        .collage-item[data-grid="span1"] {
+            grid-column: span 1;
+        }
+        .collage-item[data-color="orange"] {
+            border-color: #E6C082;
+        }
+        .collage-item[data-color="blue"] {
+            border-color: #337AC1;
+        }
+        .collage-item[data-color="nile"] {
+            border-color: #A7CBDB;
+        }
     </style>
 </head>
 <body>
 
-    <!-- ============================================================
-    PRELOADER (YUKLASH ANIMATSIYASI)
-    ============================================================ -->
+    <!-- PRELOADER -->
     <div id="preloader">
         <div class="preloader-wrapper">
             <div class="preloader-icon relative flex items-center justify-center">
@@ -396,31 +497,21 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    CUSTOM KURSOR (SICHQONCHANI ALMASHTIRADI)
-    ============================================================ -->
-    <div id="custom-cursor-dot"></div>
-    <div id="custom-cursor-outline"></div>
-
-    <!-- ============================================================
-    MOBIL MENYU (TO'LIQ EKRAN, CHAPGA SIRPANUVCHI)
-    ============================================================ -->
+    <!-- MOBIL MENYU -->
     <div id="mobile-menu-overlay" class="flex flex-col items-center justify-center gap-12">
-        <!-- Yopish tugmasi -->
         <div class="absolute top-6 right-6">
             <button id="close-menu-btn" class="w-14 h-14 flex items-center justify-center text-brand-white/60 hover:text-brand-orange transition-colors duration-300 border border-brand-white/10 rounded-full hover:border-brand-orange/50 bg-brand-dark/20 backdrop-blur-sm">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
             </button>
         </div>
         
-        <!-- Havolalar -->
         <div class="flex flex-col items-center justify-center space-y-4 w-full max-w-2xl px-6 relative">
             <img src="logo.png" alt="Mobil logo" class="h-16 w-auto mb-8 opacity-60">
             <div class="w-full text-center">
                 <a href="about.html" class="menu-link-mobile">Biz haqimizda</a>
                 <a href="projects.html" class="menu-link-mobile">Loyihalar</a>
             </div>
-            <div class="pt-12 border-t border-brand-white/10 w-full flex justify-center">
+            <div class="pt-12 border-t border-brand-white/10 w-full flex flex-col gap-4 justify-center">
                 <a href="contacts.html" class="inline-block bg-brand-orange text-brand-dark px-12 py-4 rounded-full font-semibold text-lg w-full text-center transition-all duration-300 hover:scale-105 shadow-[0_0_40px_rgba(230,192,130,0.2)]">
                     Bog'lanish
                 </a>
@@ -435,13 +526,10 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    ASOSIY NAVIGATSIYA PANELI (HEADER)
-    ============================================================ -->
+    <!-- HEADER -->
     <header id="site-header" class="fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 ease-in-out bg-transparent border-b border-transparent h-[var(--nav-height)] flex items-center">
         <div class="container mx-auto px-4 sm:px-6 lg:px-10 xl:px-16 2xl:px-24 w-full flex items-center justify-between relative">
             
-            <!-- Logotip (Desktop va Mobil) -->
             <a href="#" class="group flex items-center gap-2 md:gap-4 relative z-10">
                 <img src="logo.png" alt="Milliy Premier House" class="h-10 sm:h-12 md:h-14 lg:h-16 w-auto object-contain transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_20px_rgba(230,192,130,0.3)]">
                 <span class="hidden sm:inline-block font-inter font-semibold text-[10px] sm:text-xs md:text-sm lg:text-base tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/90 group-hover:text-brand-orange transition-colors duration-300">
@@ -449,7 +537,6 @@
                 </span>
             </a>
 
-            <!-- Desktop menyu -->
             <nav class="hidden md:flex items-center gap-6 lg:gap-8 xl:gap-10 2xl:gap-14 text-[11px] lg:text-sm xl:text-base font-medium tracking-wide text-brand-white/80">
                 <a href="about.html" class="relative py-1 hover:text-brand-white transition-colors duration-300 group">
                     <span class="relative z-10">Biz haqimizda</span>
@@ -468,7 +555,6 @@
                 </a>
             </nav>
 
-            <!-- Mobil Menu Toggle (Burger) -->
             <div class="flex md:hidden items-center gap-4 relative z-10">
                 <button id="mobile-menu-btn" class="flex flex-col justify-center items-center w-8 h-8 space-y-1.5 relative focus:outline-none group">
                     <span class="block w-6 h-[2px] bg-brand-white rounded-full transition-all duration-300 group-hover:bg-brand-orange group-hover:w-7"></span>
@@ -479,331 +565,346 @@
         </div>
     </header>
 
-    <!-- ============================================================
-    SEKSIYA 1: THE GRAND ENTRANCE (ASOSIY GEROY)
-    3000+ QATORLI SUPER ZAMONAVIY DIZAYN
-    ============================================================ -->
-    <section id="hero-section" class="relative w-full bg-brand-dark overflow-hidden flex items-center justify-center min-h-screen">
+    <!-- HERO SECTION -->
+    <section id="hero-section" class="relative w-full overflow-hidden flex items-center justify-start min-h-screen">
         
-        <!-- ============================================================
-        1. FON QATLAMLARI (KO'P QATLAMLI PARALLAKS)
-        ============================================================ -->
-        <!-- Qatlam 1: Chuqur ko'k/nil tusli yorug'lik -->
-        <div class="absolute top-1/2 left-0 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[80vw] bg-brand-blue rounded-full blur-[120px] opacity-20 mix-blend-overlay animate-pulse-glow pointer-events-none"></div>
-        
-        <!-- Qatlam 2: Issiq to'q sariq rang -->
-        <div class="absolute bottom-0 right-0 -translate-x-1/4 translate-y-1/2 w-[60vw] h-[60vw] bg-brand-orange rounded-full blur-[120px] opacity-20 mix-blend-overlay animate-floating-slow pointer-events-none"></div>
-        
-        <!-- Qatlam 3: Yumshoq Nil rangi -->
-        <div class="absolute top-1/3 right-1/3 w-[40vw] h-[40vw] bg-brand-nile rounded-full blur-[80px] opacity-15 mix-blend-screen animate-floating-reverse pointer-events-none"></div>
+        <div id="particle-canvas-container"></div>
 
-        <!-- ============================================================
-        2. HERO ASOSIY KONTENTI (TO'LIQ ADAPTIVLIK)
-        ============================================================ -->
-        <div class="relative z-10 container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 hero-grid-layout">
+        <div class="hero-content-wrapper container mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 hero-grid-layout">
             
-            <!-- ================= CHAP QISM (MATN) ================= -->
-            <div class="hero-col-left flex flex-col space-y-5 md:space-y-6 lg:space-y-8 xl:space-y-10 w-full">
+            <div class="hero-col-left flex flex-col space-y-3 md:space-y-4 lg:space-y-5 xl:space-y-6 w-full">
 
-                <!-- Mega-Sarlavhalar -->
-                <div class="space-y-1 md:space-y-2 animate-hero-title w-full relative z-20">
-                    <h1 class="text-[2.8rem] min-[400px]:text-[3.5rem] sm:text-[4.5rem] md:text-[5.5rem] lg:text-[7.5rem] xl:text-[9rem] 2xl:text-[11rem] font-black leading-[0.8] tracking-[-0.04em] text-brand-white drop-shadow-2xl w-full uppercase">
+                <div class="hero-title-wrapper animate-hero-title w-full relative z-20">
+                    <h1 class="hero-title-main font-black text-brand-white drop-shadow-2xl w-full uppercase tracking-tight">
                         MILLIY
                     </h1>
-                    <h2 class="text-[1.5rem] min-[400px]:text-[2rem] sm:text-[2.5rem] md:text-[3rem] lg:text-[4.5rem] xl:text-[5.5rem] 2xl:text-[6.5rem] font-light tracking-[0.1em] sm:tracking-[0.15em] md:tracking-[0.2em] text-brand-nile ml-1 sm:ml-2 w-full uppercase">
+                    <h2 class="hero-title-sub font-light text-brand-nile w-full uppercase tracking-wide">
                         PREMIER HOUSE
                     </h2>
                 </div>
 
-                <!-- Brend tavsifi (Uzbek tilida) -->
-                <p class="max-w-full md:max-w-md lg:max-w-lg xl:max-w-xl text-[0.95rem] sm:text-sm md:text-base lg:text-lg xl:text-xl text-brand-white/60 font-light leading-[1.6] sm:leading-relaxed animate-hero-subtitle tracking-wide relative z-20">
+                <p class="max-w-full md:max-w-lg lg:max-w-xl text-[0.85rem] sm:text-sm md:text-base lg:text-lg text-brand-white/60 font-light leading-[1.6] sm:leading-relaxed animate-hero-subtitle tracking-wide relative z-20">
                     <span class="block font-medium text-brand-white/80 mb-1">Milliy an'analar va zamonaviy texnologiyalarni birlashtirgan arxitektura byurosi.</span> 
                     2018-yildan beri kelajak uylarini qurishga yordam beramiz. Tabiat va taraqqiyot bilan uyg'unlikda yashash uchun ilhomlantiradigan makonlar yaratamiz.
                 </p>
 
-                <!-- Call To Action Tugmalari -->
-                <div class="flex flex-col sm:flex-row gap-4 pt-4 animate-hero-btn btn-group-hero w-full relative z-20">
-                    <a href="projects.html" class="btn-glow-orange inline-flex items-center justify-center gap-3 bg-brand-orange text-brand-dark px-8 py-3.5 md:px-10 md:py-4 rounded-full font-semibold text-sm sm:text-base tracking-wide transition-all duration-300 shadow-[0_0_30px_rgba(230,192,130,0.2)]">
+                <div class="flex flex-col sm:flex-row gap-4 pt-2 animate-hero-btn btn-group-hero w-full relative z-20">
+                    <a href="projects.html" class="btn-glow-orange inline-flex items-center justify-center gap-3 bg-brand-orange text-brand-dark px-8 py-3 md:px-10 md:py-3.5 rounded-full font-semibold text-sm sm:text-base tracking-wide transition-all duration-300 shadow-[0_0_30px_rgba(230,192,130,0.2)]">
                         <span>Loyihalarni ko'rish</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                     </a>
-                    <a href="about.html" class="btn-glow-glass inline-flex items-center justify-center gap-3 text-brand-white/80 hover:text-brand-white px-8 py-3.5 md:px-10 md:py-4 rounded-full font-medium text-sm sm:text-base transition-all duration-300 border border-brand-white/20 hover:border-brand-white/50 bg-brand-white/5 backdrop-blur-sm">
+                    <a href="about.html" class="btn-glow-glass inline-flex items-center justify-center gap-3 text-brand-white/80 hover:text-brand-white px-8 py-3 md:px-10 md:py-3.5 rounded-full font-medium text-sm sm:text-base transition-all duration-300 border border-brand-white/20 hover:border-brand-white/50 bg-brand-white/5 backdrop-blur-sm">
                         <span>Biz haqimizda</span>
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
                     </a>
                 </div>
 
-                <!-- Statistika bloki -->
-                <div class="flex items-center gap-4 sm:gap-8 pt-6 sm:pt-8 border-t border-brand-white/10 w-full max-w-md animate-stats stats-group-hero relative z-20">
+                <div class="flex items-center gap-4 sm:gap-8 pt-4 sm:pt-5 border-t border-brand-white/10 w-full max-w-md animate-stats stats-group-hero relative z-20">
                     <div class="flex flex-col">
-                        <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-white">2018</span>
-                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Asos solingan yil</span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-white">2018</span>
+                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Asos solingan</span>
                     </div>
                     <div class="w-px h-8 sm:h-10 lg:h-12 bg-brand-white/20"></div>
                     <div class="flex flex-col">
-                        <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-orange">8+</span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-orange">8+</span>
                         <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Tajriba yili</span>
                     </div>
                     <div class="w-px h-8 sm:h-10 lg:h-12 bg-brand-white/20 hidden sm:block"></div>
                     <div class="flex flex-col hidden sm:flex">
-                        <span class="text-2xl sm:text-3xl lg:text-4xl font-bold text-brand-nile">30+</span>
-                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Amalga oshirilgan loyihalar</span>
+                        <span class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand-nile">30+</span>
+                        <span class="text-[8px] sm:text-[10px] lg:text-[11px] uppercase tracking-[0.15em] sm:tracking-[0.2em] text-brand-white/40 font-light">Loyihalar</span>
                     </div>
                 </div>
             </div>
 
-            <!-- ================= O'NG QISM (3D VIZUALIZATSIYA) ================= -->
-            <div class="hero-col-right relative w-full">
-                <div class="relative w-full h-full flex items-center justify-center 2xl:scale-110">
-                    
-                    <!-- 3D Shisha/Staklen effektli blok -->
-                    <div class="absolute inset-0 glass-morph rounded-3xl transform rotate-6 skew-x-6 z-0 border border-brand-white/5 opacity-40 w-[80%] h-[80%] mx-auto my-auto"></div>
-                    <div class="absolute inset-0 glass-morph rounded-3xl transform -rotate-3 skew-y-6 z-0 border border-brand-blue/10 opacity-30 w-[60%] h-[60%] mx-auto my-auto"></div>
-
-                    <!-- Murakkab 3D SVG Geometrik labirint -->
-                    <svg class="w-[130%] lg:w-[110%] xl:w-[120%] h-[130%] object-contain svg-ornament transition-transform duration-100 drop-shadow-2xl relative z-10" viewBox="0 0 600 800" xmlns="http://www.w3.org/2000/svg" data-speed="-0.02">
-                        <defs>
-                            <linearGradient id="gradBlue" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#337AC1" stop-opacity="0.7" />
-                                <stop offset="100%" stop-color="#A7CBDB" stop-opacity="0.1" />
-                            </linearGradient>
-                            <linearGradient id="gradOrange" x1="100%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#E6C082" stop-opacity="0.6" />
-                                <stop offset="100%" stop-color="#337AC1" stop-opacity="0" />
-                            </linearGradient>
-                            <filter id="glowSvg" x="-50%" y="-50%" width="200%" height="200%">
-                                <feGaussianBlur stdDeviation="15" result="blur"/>
-                                <feMerge>
-                                    <feMergeNode in="blur"/>
-                                    <feMergeNode in="SourceGraphic"/>
-                                </feMerge>
-                            </filter>
-                        </defs>
-                        
-                        <!-- Arkalar va elementlar -->
-                        <path d="M 100 800 L 100 400 Q 100 150 300 150 Q 500 150 500 400 L 500 800" fill="none" stroke="url(#gradBlue)" stroke-width="14" filter="url(#glowSvg)"/>
-                        <path d="M 140 800 L 140 400 Q 140 200 300 200 Q 460 200 460 400 L 460 800" fill="none" stroke="url(#gradOrange)" stroke-width="8" />
-                        <path d="M 180 800 L 180 400 Q 180 280 300 280 Q 420 280 420 400 L 420 800" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="3" stroke-dasharray="10 10"/>
-                        <path d="M 220 800 L 220 400 Q 220 320 300 320 Q 380 320 380 400 L 380 800" fill="none" stroke="rgba(167, 203, 219, 0.3)" stroke-width="1" />
-                        
-                        <!-- Yonayotgan kristall (M logotipining abstraktsiyasi) -->
-                        <path d="M 200 400 L 300 220 L 400 400 L 300 580 Z" fill="rgba(51, 122, 193, 0.15)" stroke="rgba(230, 192, 130, 0.5)" stroke-width="5" filter="url(#glowSvg)"/>
-                        <path d="M 240 400 L 300 280 L 360 400 L 300 520 Z" fill="rgba(167, 203, 219, 0.1)" stroke="rgba(255,255,255,0.3)" stroke-width="2"/>
-                        <path d="M 270 400 L 300 330 L 330 400 L 300 470 Z" fill="rgba(230, 192, 130, 0.05)" stroke="rgba(255,255,255,0.5)" stroke-width="1"/>
-                        
-                        <!-- Dekorativ chiziqlar -->
-                        <line x1="0" y1="600" x2="600" y2="600" stroke="rgba(255,255,255,0.05)" stroke-width="2" stroke-dasharray="5 15"/>
-                        <circle cx="300" cy="400" r="150" fill="none" stroke="rgba(51, 122, 193, 0.05)" stroke-width="10" stroke-dasharray="20 10" />
-                        <circle cx="300" cy="400" r="180" fill="none" stroke="rgba(230, 192, 130, 0.03)" stroke-width="2" />
-                    </svg>
-                </div>
+            <!-- KOLLAJ -->
+            <div class="hero-col-right collage-container">
+                <div class="collage-wrapper" id="collage-wrapper"></div>
             </div>
 
-            <!-- ================= MOBIL GRAFIKA (FAQAT TELEFONLAR UCHUN) ================= -->
-            <div class="mobile-only-graphic animate-mobile-graphic relative z-20">
-                <svg class="w-full h-auto max-w-[300px] opacity-40 drop-shadow-xl" viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 30 200 L 30 100 Q 30 30 150 30 Q 270 30 270 100 L 270 200" fill="none" stroke="#337AC1" stroke-width="5" stroke-opacity="0.8"/>
-                    <path d="M 60 200 L 60 100 Q 60 60 150 60 Q 240 60 240 100 L 240 200" fill="none" stroke="#E6C082" stroke-width="2" stroke-opacity="0.6"/>
-                    <path d="M 90 200 L 90 100 Q 90 80 150 80 Q 210 80 210 100 L 210 200" fill="none" stroke="#A7CBDB" stroke-width="1.5" stroke-dasharray="4 4" stroke-opacity="0.4"/>
-                    <circle cx="150" cy="100" r="40" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4" />
-                </svg>
-            </div>
         </div>
 
     </section>
 
-    <!-- ============================================================
-    ================================================================================
-    JAVASCRIPT SKRIPTS (NAVIGATSIYA, PARALLAKS, KURSOR, PRELOADER)
-    ================================================================================
-    ============================================================ -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', function() {
             
             // ============================================================
-            // 1. CUSTOM KURSOR (3D GLOW EFFECT)
+            // KOLLAJ - FAQAT RO'YXATDAGI RASMLAR, 10 MARTA TAKROR
             // ============================================================
-            const cursorDot = document.getElementById('custom-cursor-dot');
-            const cursorOutline = document.getElementById('custom-cursor-outline');
-            let mouseX = -100, mouseY = -100;
-            let outlineX = -100, outlineY = -100;
-
-            // Standart kursorni elementlarga yashirish
-            document.querySelectorAll('a, button, input, textarea').forEach(el => {
-                el.addEventListener('mouseenter', () => {
-                    cursorOutline.classList.add('hover-glow');
-                });
-                el.addEventListener('mouseleave', () => {
-                    cursorOutline.classList.remove('hover-glow');
-                });
-            });
-
-            document.addEventListener('mousemove', (e) => {
-                mouseX = e.clientX;
-                mouseY = e.clientY;
-                cursorDot.style.left = mouseX + 'px';
-                cursorDot.style.top = mouseY + 'px';
-            });
-
-            // Silliq kuzatish (Leading lag effect)
-            function animateCursor() {
-                outlineX += (mouseX - outlineX) * 0.12;
-                outlineY += (mouseY - outlineY) * 0.12;
-                cursorOutline.style.left = outlineX + 'px';
-                cursorOutline.style.top = outlineY + 'px';
-                requestAnimationFrame(animateCursor);
+            const collageWrapper = document.getElementById('collage-wrapper');
+            
+            // Siz bergan ro'yxatdagi barcha rasmlar
+            const imageList = [
+                '1 (2).webp',
+                '1 (3).webp',
+                '1 (4).webp',
+                '1 (7).webp',
+                '1 (9).webp',
+                '1 (10).webp',
+                '1 (11).webp',
+                '1 (16).webp',
+                '2 (2).webp',
+                '3 (11).webp',
+                '3.webp',
+                '4 (8).webp',
+                '4 (15).webp',
+                '5 (5).webp',
+                '5 (12).webp',
+                '6 (4).webp',
+                '6 (11).webp',
+                '7 (6).webp',
+                '7 (13).webp'
+            ];
+            
+            const duplicateCount = 10; // 10 marta takrorlash
+            const colors = ['orange', 'blue', 'nile'];
+            
+            // Fragment yaratish
+            const fragment = document.createDocumentFragment();
+            let totalItems = 0;
+            
+            // 10 marta takrorlash
+            for (let copy = 0; copy < duplicateCount; copy++) {
+                for (let i = 0; i < imageList.length; i++) {
+                    const fileName = imageList[i];
+                    const src = 'collage/' + fileName; // LOCAL WebP
+                    
+                    const item = document.createElement('div');
+                    item.className = 'collage-item loading';
+                    
+                    // Klon bo'lsa opacity pasaytiriladi
+                    if (copy > 0) {
+                        item.classList.add('clone');
+                    }
+                    
+                    // Grid span - tasodifiy
+                    const spanType = (i % 5 === 2 || i % 5 === 4) ? 'span2' : 'span1';
+                    const colorType = colors[i % 3];
+                    
+                    item.setAttribute('data-grid', spanType);
+                    item.setAttribute('data-color', colorType);
+                    
+                    // Rasm elementi
+                    const img = document.createElement('img');
+                    img.src = src;
+                    img.alt = 'Collage image ' + (i + 1);
+                    img.loading = 'lazy';
+                    img.decoding = 'async';
+                    
+                    // Birinchi 5 ta rasmga high priority
+                    if (copy === 0 && i < 5) {
+                        img.fetchpriority = 'high';
+                        img.loading = 'eager';
+                    }
+                    
+                    // Rasm yuklanganda loading class ni olib tashlash
+                    img.onload = function() {
+                        item.classList.remove('loading');
+                    };
+                    
+                    // Xatolik bo'lsa fallback
+                    img.onerror = function() {
+                        console.error('Rasm yuklanmadi:', src);
+                        this.style.display = 'none';
+                        item.style.background = 'linear-gradient(135deg, #337AC1, #E6C082)';
+                        item.classList.remove('loading');
+                        // Xatolik haqida xabar
+                        var errorDiv = document.createElement('div');
+                        errorDiv.style.cssText = 'color:white;text-align:center;padding:20px;font-size:12px;';
+                        errorDiv.textContent = fileName + ' ⛔';
+                        item.appendChild(errorDiv);
+                    };
+                    
+                    item.appendChild(img);
+                    fragment.appendChild(item);
+                    totalItems++;
+                }
             }
-            animateCursor();
-
-            // ============================================================
-            // 2. KANVAS ASOSIDAGI ZARRACHALAR TIZIMI (MOUSE BILAN HARAKAT)
-            // ============================================================
-            const canvas = document.createElement('canvas');
-            canvas.id = 'particle-canvas';
-            canvas.style.position = 'absolute';
-            canvas.style.top = '0';
-            canvas.style.left = '0';
-            canvas.style.width = '100%';
-            canvas.style.height = '100%';
-            canvas.style.pointerEvents = 'none';
-            canvas.style.zIndex = '0';
             
-            const heroSection = document.getElementById('hero-section');
-            heroSection.insertBefore(canvas, heroSection.firstChild);
-
-            const ctx = canvas.getContext('2d');
-            let width, height;
-            let particles = [];
-            const particleCount = 120;
-
+            collageWrapper.appendChild(fragment);
+            console.log('✅ Kolaj yaratildi! Jami:', totalItems, 'ta rasm');
+            
+            // ============================================================
+            // CHEKSIZ SKROLL
+            // ============================================================
+            let scrollInterval;
+            let isHovering = false;
+            let scrollSpeed = 1.2;
+            
+            function startInfiniteScroll() {
+                if (scrollInterval) {
+                    clearInterval(scrollInterval);
+                }
+                
+                scrollInterval = setInterval(function() {
+                    if (!isHovering && collageWrapper) {
+                        collageWrapper.scrollTop += scrollSpeed;
+                        
+                        if (collageWrapper.scrollTop + collageWrapper.clientHeight >= collageWrapper.scrollHeight - 2) {
+                            collageWrapper.scrollTop = 0;
+                        }
+                    }
+                }, 30);
+            }
+            
+            startInfiniteScroll();
+            
+            collageWrapper.addEventListener('mouseenter', function() {
+                isHovering = true;
+            });
+            
+            collageWrapper.addEventListener('mouseleave', function() {
+                isHovering = false;
+            });
+            
+            collageWrapper.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                collageWrapper.scrollTop += e.deltaY * 0.8;
+            }, { passive: false });
+            
+            // ============================================================
+            // KANVAS ZARRACHALARI
+            // ============================================================
+            var canvas = document.createElement('canvas');
+            canvas.id = 'particle-canvas';
+            canvas.style.cssText = 'position:absolute!important;top:0!important;left:0!important;width:100%!important;height:100%!important;pointer-events:none!important;z-index:2!important;';
+            
+            var heroSection = document.getElementById('hero-section');
+            heroSection.appendChild(canvas);
+            
+            var ctx = canvas.getContext('2d');
+            var width, height;
+            var particles = [];
+            var particleCount = 50;
+            
             function resizeCanvas() {
-                width = canvas.width = window.innerWidth;
-                height = canvas.height = window.innerHeight;
+                var rect = heroSection.getBoundingClientRect();
+                width = canvas.width = rect.width;
+                height = canvas.height = rect.height;
             }
             window.addEventListener('resize', resizeCanvas);
             resizeCanvas();
-
-            class Particle {
-                constructor() {
-                    this.x = Math.random() * width;
-                    this.y = Math.random() * height;
-                    this.vx = (Math.random() - 0.5) * 0.5;
-                    this.vy = (Math.random() - 0.5) * 0.5;
-                    this.size = Math.random() * 2 + 0.5;
-                    this.opacity = Math.random() * 0.4 + 0.1;
-                    this.color = Math.random() > 0.6 ? '#E6C082' : (Math.random() > 0.5 ? '#337AC1' : '#A7CBDB');
-                }
-                update() {
-                    this.x += this.vx;
-                    this.y += this.vy;
-                    if (this.x < 0 || this.x > width) this.vx *= -1;
-                    if (this.y < 0 || this.y > height) this.vy *= -1;
-                }
-                draw() {
-                    ctx.beginPath();
-                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                    ctx.fillStyle = this.color;
-                    ctx.shadowColor = this.color;
-                    ctx.shadowBlur = 10;
-                    ctx.globalAlpha = this.opacity;
-                    ctx.fill();
-                }
+            
+            function Particle() {
+                this.x = Math.random() * width;
+                this.y = Math.random() * height;
+                this.vx = (Math.random() - 0.5) * 0.3;
+                this.vy = (Math.random() - 0.5) * 0.3;
+                this.size = Math.random() * 1.5 + 0.5;
+                this.opacity = Math.random() * 0.25 + 0.05;
+                var colors = ['#E6C082', '#337AC1', '#A7CBDB', '#FFFFFF'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
             }
-
-            for (let i = 0; i < particleCount; i++) {
+            
+            Particle.prototype.update = function() {
+                this.x += this.vx;
+                this.y += this.vy;
+                if (this.x < 0 || this.x > width) this.vx *= -1;
+                if (this.y < 0 || this.y > height) this.vy *= -1;
+            };
+            
+            Particle.prototype.draw = function() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color;
+                ctx.shadowColor = this.color;
+                ctx.shadowBlur = 6;
+                ctx.globalAlpha = this.opacity;
+                ctx.fill();
+            };
+            
+            for (var i = 0; i < particleCount; i++) {
                 particles.push(new Particle());
             }
-
-            let mouse = { x: null, y: null };
-            heroSection.addEventListener('mousemove', (e) => {
-                const rect = heroSection.getBoundingClientRect();
+            
+            var mouse = { x: null, y: null };
+            heroSection.addEventListener('mousemove', function(e) {
+                var rect = heroSection.getBoundingClientRect();
                 mouse.x = e.clientX - rect.left;
                 mouse.y = e.clientY - rect.top;
             });
-            heroSection.addEventListener('mouseleave', () => {
+            heroSection.addEventListener('mouseleave', function() {
                 mouse.x = null;
                 mouse.y = null;
             });
-
+            
             function animateParticles() {
                 ctx.clearRect(0, 0, width, height);
                 
-                particles.forEach((p, index) => {
+                for (var i = 0; i < particles.length; i++) {
+                    var p = particles[i];
                     p.update();
                     p.draw();
-
-                    // Mouse bilan yaqinlashganda particlelarni tortish effekti
+                    
                     if (mouse.x !== null) {
-                        const dx = mouse.x - p.x;
-                        const dy = mouse.y - p.y;
-                        const distance = Math.sqrt(dx * dx + dy * dy);
+                        var dx = mouse.x - p.x;
+                        var dy = mouse.y - p.y;
+                        var distance = Math.sqrt(dx * dx + dy * dy);
                         if (distance < 150) {
-                            const force = (150 - distance) / 300;
+                            var force = (150 - distance) / 400;
                             p.vx -= dx * force * 0.015;
                             p.vy -= dy * force * 0.015;
-                            // Tezlikni cheklash
-                            const maxSpeed = 4;
-                            const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+                            var maxSpeed = 2.5;
+                            var speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
                             if (speed > maxSpeed) {
                                 p.vx = (p.vx / speed) * maxSpeed;
                                 p.vy = (p.vy / speed) * maxSpeed;
                             }
                         }
                     }
-
-                    // Particles o'zaro chiziqlar bilan bog'lanishi (Network effect)
-                    for (let j = index + 1; j < particles.length; j++) {
-                        const p2 = particles[j];
-                        const dx = p.x - p2.x;
-                        const dy = p.y - p2.y;
-                        const dist = Math.sqrt(dx * dx + dy * dy);
-                        if (dist < 120) {
+                    
+                    for (var j = i + 1; j < particles.length; j++) {
+                        var p2 = particles[j];
+                        var dx = p.x - p2.x;
+                        var dy = p.y - p2.y;
+                        var dist = Math.sqrt(dx * dx + dy * dy);
+                        if (dist < 80) {
                             ctx.beginPath();
                             ctx.moveTo(p.x, p.y);
                             ctx.lineTo(p2.x, p2.y);
-                            ctx.strokeStyle = `rgba(167, 203, 219, ${0.08 * (1 - dist / 120)})`;
+                            ctx.strokeStyle = 'rgba(167, 203, 219, ' + (0.04 * (1 - dist / 80)) + ')';
                             ctx.lineWidth = 0.5;
                             ctx.stroke();
                         }
                     }
-                });
+                }
                 requestAnimationFrame(animateParticles);
             }
             animateParticles();
-
+            
             // ============================================================
-            // 3. PRELOADER (YUKLASH ANIMATSIYASI)
+            // PRELOADER
             // ============================================================
-            const preloader = document.getElementById('preloader');
-            setTimeout(() => {
+            var preloader = document.getElementById('preloader');
+            setTimeout(function() {
                 preloader.classList.add('hidden-loader');
-                setTimeout(() => {
+                setTimeout(function() {
                     preloader.style.display = 'none';
                     document.body.style.overflow = 'auto';
                 }, 1400);
-            }, 2400);
-
+            }, 2000);
+            
             // ============================================================
-            // 4. NAVBAR (AYLANTIRISH EFFEKTI)
+            // NAVBAR
             // ============================================================
-            const header = document.getElementById('site-header');
-            window.addEventListener('scroll', () => {
-                const scrollY = window.scrollY;
-                if (scrollY > 80) {
+            var header = document.getElementById('site-header');
+            window.addEventListener('scroll', function() {
+                if (window.scrollY > 80) {
                     header.classList.add('navbar-scrolled');
                 } else {
                     header.classList.remove('navbar-scrolled');
                 }
             });
-
+            
             // ============================================================
-            // 5. MOBIL MENYU (OCHISH/YOPISH)
+            // MOBIL MENYU
             // ============================================================
-            const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-            const closeMenuBtn = document.getElementById('close-menu-btn');
-            const mobileMenu = document.getElementById('mobile-menu-overlay');
-
-            const toggleMenu = (open) => {
+            var mobileMenuBtn = document.getElementById('mobile-menu-btn');
+            var closeMenuBtn = document.getElementById('close-menu-btn');
+            var mobileMenu = document.getElementById('mobile-menu-overlay');
+            
+            function toggleMenu(open) {
                 if (open) {
                     mobileMenu.classList.add('open');
                     document.body.style.overflow = 'hidden';
@@ -811,62 +912,22 @@
                     mobileMenu.classList.remove('open');
                     document.body.style.overflow = 'auto';
                 }
-            };
-
-            mobileMenuBtn.addEventListener('click', () => toggleMenu(true));
-            closeMenuBtn.addEventListener('click', () => toggleMenu(false));
+            }
             
-            const mobileLinks = mobileMenu.querySelectorAll('a');
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', () => toggleMenu(false));
-            });
-            mobileMenu.addEventListener('click', (e) => {
+            mobileMenuBtn.addEventListener('click', function() { toggleMenu(true); });
+            closeMenuBtn.addEventListener('click', function() { toggleMenu(false); });
+            
+            var mobileLinks = mobileMenu.querySelectorAll('a');
+            for (var i = 0; i < mobileLinks.length; i++) {
+                mobileLinks[i].addEventListener('click', function() { toggleMenu(false); });
+            }
+            mobileMenu.addEventListener('click', function(e) {
                 if (e.target === mobileMenu) toggleMenu(false);
             });
-
-            // ============================================================
-            // 6. PARALLAKS (SICHQONCHA HARAKATI)
-            // ============================================================
-            const ornaments = document.querySelectorAll('.svg-ornament');
-            const blurSpheres = document.querySelectorAll('.swirl-orange, .swirl-blue, .animate-floating-slow, .animate-floating-reverse');
-
-            if (heroSection) {
-                heroSection.addEventListener('mousemove', (e) => {
-                    const rect = heroSection.getBoundingClientRect();
-                    const x = (e.clientX - rect.left) / rect.width - 0.5;
-                    const y = (e.clientY - rect.top) / rect.height - 0.5;
-
-                    ornaments.forEach((el) => {
-                        const speed = parseFloat(el.getAttribute('data-speed')) || 0.02;
-                        const moveX = x * 80 * speed;
-                        const moveY = y * 80 * speed;
-                        el.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                        el.style.opacity = 0.7;
-                        clearTimeout(el._timeout);
-                        el._timeout = setTimeout(() => { el.style.opacity = 0.15; }, 500);
-                    });
-
-                    blurSpheres.forEach((el) => {
-                        const speed = 0.02;
-                        const moveX = x * 40 * speed;
-                        const moveY = y * 40 * speed;
-                        el.style.transform = `translate(${moveX}px, ${moveY}px)`;
-                    });
-                });
-
-                heroSection.addEventListener('mouseleave', () => {
-                    ornaments.forEach((el) => {
-                        el.style.transform = 'translate(0, 0)';
-                        el.style.opacity = 0.15;
-                    });
-                    blurSpheres.forEach((el) => {
-                        el.style.transform = 'translate(0, 0)';
-                    });
-                });
-            }
+            
         });
     </script>
-
+    
     <!-- ============================================================
 SEKSIYA 2: BIZ HAQIMIZDA (HISTORY & HERITAGE)
 O'NG TOMONDA PARALLAKS EFFEKTLI RASM, CHAPDA MATN
